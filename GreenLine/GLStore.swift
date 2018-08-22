@@ -61,7 +61,7 @@ class GLStore {
                         = try JSONSerialization.jsonObject(with: jsonData, options: []) as AnyObject
 //                    let jsonDictionary = JSONDecoder().decode(RawServerResponse, from: jsonObject)
                     let decoder = JSONDecoder()
-//                    print(jsonData)
+                    print(jsonData)
                     do {
                         let todo = try decoder.decode(RawServerResponse.self, from: jsonData)
                         print(todo)
