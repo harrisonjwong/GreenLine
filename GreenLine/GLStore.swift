@@ -61,15 +61,13 @@ class GLStore {
                         = try JSONSerialization.jsonObject(with: jsonData, options: []) as AnyObject
 //                    let jsonDictionary = JSONDecoder().decode(RawServerResponse, from: jsonObject)
                     let decoder = JSONDecoder()
-                    print(jsonData)
+//                    print(jsonObject)
                     do {
-                        let todo = try decoder.decode(RawServerResponse.self, from: jsonData)
-                        print(todo)
-//                        completionHandler(todo, nil)
+                        let stuff = try decoder.decode(RawServerResponse.self, from: jsonData)
+                        print(stuff)
                     } catch {
                         print("error trying to convert data to JSON")
                         print(error)
-//                        completionHandler(nil, error)
                     }
                     
                 } catch let error {
@@ -86,63 +84,66 @@ class GLStore {
         task.resume()
     }
     
-    
- /*
-    enum TrainResult {
-        case Success([Train])
-        case Failure(Error)
-    }
-    
-    enum TrainError: Error {
-        case InvalidJSONData
-    }
-    
-    static func trainsFromJSONData(data: Data) -> TrainResult {
-        do {
-            let jsonObject: AnyObject
-                = try JSONSerialization.jsonObject(with: data, options: []) as AnyObject
-            
-            guard let
-            jsonDictionary = jsonObject as? [NSObject:AnyObject],
-                photos
-            
-            var finalTrains = [Train]()
-            return .Success(finalTrains)
-        }
-        catch let error {
-            return .Failure(error)
-        }
-    }
- */
 }
 
-struct RawServerResponse: Decodable {
-    struct data: Decodable {
-        struct attributes: Decodable {
-            var arrival: String
-            var departure: String
-            var direction: Int
-            var status: String
-        }
-        struct relationships: Decodable {
-            struct route: Decodable {
-                struct data: Decodable {
-                    var destination: String
-                }
-            }
-            struct trip: Decodable {
-                struct data: Decodable {
-                    var trainNum: String
-                }
-            }
-        }
-    }
-    struct included: Decodable {
-        struct attributes: Decodable {
-            var headsign: String
-            var label: String
-        }
+struct RawServerResponse: Codable {
+    struct data: Codable {
+        var attributes: AttributesData
         var id: String
+        var relationships: Relationships
+        var type: String
+    }
+    struct AttributesData: Codable {
+        var arrival_time: String
+        var departure_time: String
+        var direction_id: Int
+        var schedule_relationship: String
+        var status: String
+        var stop_sequence: Int
+    }
+    struct Relationships: Codable {
+        var route: DataWithIdAndType
+        var stop: DataWithIdAndType
+        var trip: DataWithIdAndType
+        var vehicle: DataWithIdAndType
+    }
+    struct DataWithIdAndType: Codable {
+        var data: DataWithIdType
+    }
+    struct DataWithIdType: Codable {
+        var id: String
+        var type: String
+    }
+    struct included: Codable {
+        var attributes: AttributesIncluded
+        var id: String
+        var links: Links
+        var relationships: Relationships
+        var type: String
+    }
+    struct AttributesIncluded: Codable {
+        //first type - trip
+        var block_id: String?
+        var direction_id: Int? // used in both types
+        var headsign: String?
+        var name: String?
+        var wheelchair_accessible: Int?
+        //second type - vehicle
+        var bearing: Int?
+        var current_status: String?
+        var current_stop_sequence: Int?
+        var label: String?
+        var latitude: Int?
+        var longitude: Int?
+        var speed: Int?
+        var updated_at: String?
+    }
+    struct Links: Codable {
+        var self1: String
+    }
+    var jsonapi: jsonApi
+    struct jsonApi: Codable {
+        var version: String
     }
 }
 
