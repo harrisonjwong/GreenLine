@@ -14,13 +14,15 @@ class Train {
     let direction: String // 0 = Westbound, 1 = Eastbound
     let carNumbers: String // 36xx-38xx
     let arrivalTime: Date? // arrival time for all stations except downtown WB stations
+    let departureTime: Date?
     let stopsAway: Int? // stops away for downtown WB stations
     
-    init(route: String, direction: String, carNumbers: String, arrivalTime: Date?, stopsAway: Int?) {
+    init(route: String, direction: String, carNumbers: String, arrivalTime: Date?, departureTime: Date?, stopsAway: Int?) {
         self.route = route
         self.direction = direction
         self.carNumbers = carNumbers
         self.arrivalTime = arrivalTime
+        self.departureTime = departureTime
         self.stopsAway = stopsAway
     }
     

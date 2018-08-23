@@ -10,7 +10,7 @@ import Foundation
 
 class GLStore {
     
-    let options = ["filter[route]": "Green-B,Green-C,Green-D,Green-E", "include": "vehicle,trip", "filter[stop]": "place-chhil"]
+    var options = ["filter[route]": "Green-B,Green-C,Green-D,Green-E", "include": "vehicle,trip"]
     
     let baseURLString = "https://api-v3.mbta.com/predictions"
     let apiKey = "eb4cde2daae74dcfbbf324987283b2d4"
@@ -48,7 +48,8 @@ class GLStore {
     }()
     
     
-    func fetchData() {
+    func fetchData(station: String) {
+        options["filter[stop]"] = station
         let url = getURL(parameters: options)
         print(url)
         let request = URLRequest(url: url)
@@ -57,14 +58,14 @@ class GLStore {
             
             if let jsonData = data {
                 do {
-                    let jsonObject: AnyObject
-                        = try JSONSerialization.jsonObject(with: jsonData, options: []) as AnyObject
-//                    let jsonDictionary = JSONDecoder().decode(RawServerResponse, from: jsonObject)
                     let decoder = JSONDecoder()
-//                    print(jsonObject)
                     do {
                         let stuff = try decoder.decode(RawServerResponse.self, from: jsonData)
-                        print(stuff)
+//                        print(stuff)
+                        for i in stuff.data {
+                            print(i.relationships.vehicle.data?.id)
+                        }
+//                        print(stuff.data[0].id)
                     } catch {
                         print("error trying to convert data to JSON")
                         print(error)
@@ -87,38 +88,38 @@ class GLStore {
 }
 
 struct RawServerResponse: Codable {
-    struct data: Codable {
+    struct Data: Codable {
         var attributes: AttributesData
-        var id: String
-        var relationships: Relationships
+        var id: String?
+        var relationships: RelationshipsData
         var type: String
     }
     struct AttributesData: Codable {
-        var arrival_time: String
-        var departure_time: String
+        var arrival_time: String?
+        var departure_time: String?
         var direction_id: Int
-        var schedule_relationship: String
-        var status: String
-        var stop_sequence: Int
+        var schedule_relationship: String?
+        var status: String?
+        var stop_sequence: Int?
     }
-    struct Relationships: Codable {
+    struct RelationshipsData: Codable {
         var route: DataWithIdAndType
         var stop: DataWithIdAndType
         var trip: DataWithIdAndType
         var vehicle: DataWithIdAndType
     }
     struct DataWithIdAndType: Codable {
-        var data: DataWithIdType
+        var data: DataWithIdType?
     }
     struct DataWithIdType: Codable {
-        var id: String
-        var type: String
+        var id: String?
+        var type: String?
     }
-    struct included: Codable {
+    struct Included: Codable {
         var attributes: AttributesIncluded
         var id: String
-        var links: Links
-        var relationships: Relationships
+//        var links: Links
+        var relationships: RelationshipsIncluded
         var type: String
     }
     struct AttributesIncluded: Codable {
@@ -133,22 +134,51 @@ struct RawServerResponse: Codable {
         var current_status: String?
         var current_stop_sequence: Int?
         var label: String?
-        var latitude: Int?
-        var longitude: Int?
+        var latitude: Double?
+        var longitude: Double?
         var speed: Int?
         var updated_at: String?
     }
-    struct Links: Codable {
-        var self1: String
+    struct RelationshipsIncluded: Codable {
+        // trip = route, service, shape, vehicle
+        // vehicle = route, stop, trip
+        var route: DataWithIdAndType
+        var service: DataWithIdAndType?
+        var stop: DataWithIdAndType?
+        var trip: DataWithIdAndType?
+        var shape: DataWithIdAndType?
+        var vehicle: DataWithIdAndType?
+        
+        
     }
+//    struct Links: Codable {
+//        var self1: String
+//    }
+    var data: [Data]
+    var included: [Included]
     var jsonapi: jsonApi
     struct jsonApi: Codable {
         var version: String
     }
 }
 
-struct ServerResponse: Decodable {
-    
+struct SeparatedServerResponse: Codable {
+//    var id: String
+//    var username: String
+//    var fullName: String
+//    var reviewCount: Int
+//
+//    init(from decoder: Decoder) throws {
+//        let rawResponse = try RawServerResponse(from: decoder)
+//
+//        // Now you can pick items that are important to your data model,
+//        // conveniently decoded into a Swift structure
+//        id = String(rawResponse.id)
+//        username = rawResponse.user.user_name
+//        fullName = rawResponse.user.real_info.full_name
+//        reviewCount = rawResponse.reviews_count.first!.count
+//
+//    }
 }
 
 // data -> # -> attributes -> arrival_time
