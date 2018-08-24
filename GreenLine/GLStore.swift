@@ -8,6 +8,12 @@
 
 import Foundation
 
+let df: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+    return formatter
+}()
+
 class GLStore {
     
     var options = ["filter[route]": "Green-B,Green-C,Green-D,Green-E", "include": "vehicle,trip"]
@@ -47,6 +53,14 @@ class GLStore {
         return URLSession(configuration: config)
     }()
     
+//    df.locale = Locale(identifier: "en_US_POSIX")
+//    df.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+//    df.timeZone = TimeZone(secondsFromGMT: 0)
+//    let dateFormatter: DateFormatter = {
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "M/dd/yyyy h:mm a"
+//        return formatter
+//    }()
     
     func fetchData(station: String) {
         options["filter[stop]"] = station
@@ -60,12 +74,17 @@ class GLStore {
                 do {
                     let decoder = JSONDecoder()
                     do {
-                        let stuff = try decoder.decode(RawServerResponse.self, from: jsonData)
+                        let stuff = try decoder.decode(SeparatedServerResponse.self, from: jsonData)
 //                        print(stuff)
-                        for i in stuff.data {
-                            print(i.relationships.vehicle.data?.id)
-                        }
-//                        print(stuff.data[0].id)
+//                        for i in stuff.data {
+//                            var d = i.attributes.arrival_time
+//                            if d != nil {
+//                                print(self.df.date(from: d!)?.timeIntervalSinceNow)
+//                            } else {
+//                                print(i.attributes.status)
+//                            }
+//                        }
+                        print(stuff)
                     } catch {
                         print("error trying to convert data to JSON")
                         print(error)
@@ -154,6 +173,7 @@ struct RawServerResponse: Codable {
 //    struct Links: Codable {
 //        var self1: String
 //    }
+    
     var data: [Data]
     var included: [Included]
     var jsonapi: jsonApi
@@ -162,23 +182,91 @@ struct RawServerResponse: Codable {
     }
 }
 
-struct SeparatedServerResponse: Codable {
-//    var id: String
-//    var username: String
-//    var fullName: String
-//    var reviewCount: Int
-//
-//    init(from decoder: Decoder) throws {
-//        let rawResponse = try RawServerResponse(from: decoder)
-//
-//        // Now you can pick items that are important to your data model,
-//        // conveniently decoded into a Swift structure
-//        id = String(rawResponse.id)
-//        username = rawResponse.user.user_name
-//        fullName = rawResponse.user.real_info.full_name
-//        reviewCount = rawResponse.reviews_count.first!.count
-//
-//    }
+struct SeparatedServerResponse: Decodable {
+    var trains = [Train]()
+
+    init(from decoder: Decoder) throws {
+        let rawResponse = try RawServerResponse(from: decoder)
+
+        // Now you can pick items that are important to your data model,
+        // conveniently decoded into a Swift structure
+        
+        var predictions = [String : RawServerResponse.Data]()
+        var stopsAwayPredictions = [String : String]()
+        for data in rawResponse.data {
+            if data.relationships.vehicle.data?.id != nil {
+                predictions[(data.relationships.vehicle.data?.id)!] = data
+            } else {
+                stopsAwayPredictions[(data.relationships.trip.data?.id)!] = data.attributes.status!
+            }
+        }
+        var vehicles = [String : RawServerResponse.Included]()
+        var trips = [String : RawServerResponse.Included]()
+        for data in rawResponse.included {
+            if data.type == "vehicle" {
+                vehicles[data.id] = data
+            } else {
+                trips[(data.relationships.vehicle?.data?.id)!] = data
+            }
+        }
+//        print(predictions.keys)
+//        print(vehicles.keys)
+//        print(trips.keys)
+        
+        var combinedData = [CombinedData]()
+        for id in predictions.keys {
+            combinedData.append(CombinedData(id: id, prediction: predictions[id]!, vehicle: vehicles[id]!, trip: trips[id]!, stopsAway: nil))
+        }
+        
+//        print(combinedData)
+        // MAYBE need to find a better way to do this because it loops again
+        for train in combinedData {
+            if let numAway = stopsAwayPredictions[(train.vehicle.attributes.label)!] {
+                train.stopsAway = numAway
+            }
+
+        }
+        //        print(combinedData)
+        
+        for glTrain in combinedData {
+            trains.append(Train(id: glTrain.id,
+                                route: (glTrain.prediction.relationships.route.data!.id)!,
+                                headsign: (glTrain.trip.attributes.headsign)!,
+                                direction: glTrain.prediction.attributes.direction_id,
+                                carNumbers: (glTrain.vehicle.attributes.label)!,
+                                arrivalTime: getDateOrNilFromString(dateAsString: glTrain.prediction.attributes.arrival_time),
+                                departureTime: getDateOrNilFromString(dateAsString: glTrain.prediction.attributes.departure_time),
+                                stopsAway: glTrain.stopsAway))
+        }
+        
+    }
+}
+
+func getDateOrNilFromString(dateAsString: String?)-> Date? {
+    if dateAsString != nil {
+        return df.date(from: dateAsString!)
+    } else {
+        return nil
+    }
+}
+
+class CombinedData : CustomStringConvertible {
+    var id: String
+    var prediction: RawServerResponse.Data
+    var vehicle: RawServerResponse.Included
+    var trip: RawServerResponse.Included
+    var stopsAway: String?
+    
+    init(id: String, prediction: RawServerResponse.Data, vehicle: RawServerResponse.Included, trip: RawServerResponse.Included, stopsAway: String?) {
+        self.id = id
+        self.prediction = prediction
+        self.vehicle = vehicle
+        self.trip = trip
+        self.stopsAway = stopsAway
+    }
+    var description: String {
+        return "ID: \(id)\n Route: \(prediction.relationships.route.data!.id)\n Headsign: \(trip.attributes.headsign)\n Direction: \(prediction.attributes.direction_id)\n Car Numbers: \(vehicle.attributes.label)\n Arrival Time: \(prediction.attributes.arrival_time)\n Departure Time: \(prediction.attributes.departure_time)\n Stops Away: \(stopsAway)\n\n"
+    }
 }
 
 // data -> # -> attributes -> arrival_time
@@ -186,3 +274,4 @@ struct SeparatedServerResponse: Codable {
 // data -> # -> attributes -> label
 // data -> # -> attributes -> status
 // data -> # -> relationships -> route -> data -> id
+//.timeIntervalSinceNow
