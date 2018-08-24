@@ -8,6 +8,7 @@
 
 import Foundation
 
+// Date format that the arrival and departure times come in
 let df: DateFormatter = {
     let formatter = DateFormatter()
     formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
@@ -16,11 +17,13 @@ let df: DateFormatter = {
 
 class GLStore {
     
+    //options that allow us to select the Green Line and predictions
     var options = ["filter[route]": "Green-B,Green-C,Green-D,Green-E", "include": "vehicle,trip"]
     
     let baseURLString = "https://api-v3.mbta.com/predictions"
     let apiKey = "eb4cde2daae74dcfbbf324987283b2d4"
     
+    // gets the API url based on given parameters
     func getURL(parameters: [String:String]?) -> URL {
         var components = URLComponents(string: baseURLString)!
         
@@ -53,45 +56,22 @@ class GLStore {
         return URLSession(configuration: config)
     }()
     
-//    df.locale = Locale(identifier: "en_US_POSIX")
-//    df.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
-//    df.timeZone = TimeZone(secondsFromGMT: 0)
-//    let dateFormatter: DateFormatter = {
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "M/dd/yyyy h:mm a"
-//        return formatter
-//    }()
-    
     func fetchData(station: String) {
         options["filter[stop]"] = station
         let url = getURL(parameters: options)
-        print(url)
+        print("\(url)\n")
         let request = URLRequest(url: url)
         let task = session.dataTask(with: request) {
             (data, response, error) -> Void in
             
             if let jsonData = data {
+                let decoder = JSONDecoder()
                 do {
-                    let decoder = JSONDecoder()
-                    do {
-                        let stuff = try decoder.decode(SeparatedServerResponse.self, from: jsonData)
-//                        print(stuff)
-//                        for i in stuff.data {
-//                            var d = i.attributes.arrival_time
-//                            if d != nil {
-//                                print(self.df.date(from: d!)?.timeIntervalSinceNow)
-//                            } else {
-//                                print(i.attributes.status)
-//                            }
-//                        }
-                        print(stuff)
-                    } catch {
-                        print("error trying to convert data to JSON")
-                        print(error)
-                    }
-                    
-                } catch let error {
-                    print("Error creating JSON object: \(error)")
+                    let stuff = try decoder.decode(SeparatedServerResponse.self, from: jsonData)
+                    print(stuff)
+                } catch {
+                    print("error trying to convert data to JSON")
+                    print(error)
                 }
             }
             else if let requestError = error {
@@ -106,13 +86,16 @@ class GLStore {
     
 }
 
+// a way to get all the data from the JSON
 struct RawServerResponse: Codable {
+    
     struct Data: Codable {
         var attributes: AttributesData
         var id: String?
         var relationships: RelationshipsData
         var type: String
     }
+    
     struct AttributesData: Codable {
         var arrival_time: String?
         var departure_time: String?
@@ -121,26 +104,30 @@ struct RawServerResponse: Codable {
         var status: String?
         var stop_sequence: Int?
     }
+    
     struct RelationshipsData: Codable {
         var route: DataWithIdAndType
         var stop: DataWithIdAndType
         var trip: DataWithIdAndType
         var vehicle: DataWithIdAndType
     }
+    
     struct DataWithIdAndType: Codable {
         var data: DataWithIdType?
     }
+    
     struct DataWithIdType: Codable {
         var id: String?
         var type: String?
     }
+    
     struct Included: Codable {
         var attributes: AttributesIncluded
         var id: String
-//        var links: Links
         var relationships: RelationshipsIncluded
         var type: String
     }
+    
     struct AttributesIncluded: Codable {
         //first type - trip
         var block_id: String?
@@ -158,6 +145,7 @@ struct RawServerResponse: Codable {
         var speed: Int?
         var updated_at: String?
     }
+    
     struct RelationshipsIncluded: Codable {
         // trip = route, service, shape, vehicle
         // vehicle = route, stop, trip
@@ -167,32 +155,35 @@ struct RawServerResponse: Codable {
         var trip: DataWithIdAndType?
         var shape: DataWithIdAndType?
         var vehicle: DataWithIdAndType?
-        
-        
     }
-//    struct Links: Codable {
-//        var self1: String
-//    }
-    
+
     var data: [Data]
     var included: [Included]
     var jsonapi: jsonApi
     struct jsonApi: Codable {
         var version: String
     }
+    
 }
 
+//runs the RawServerResponse on the JSON then combines the data into a Train
 struct SeparatedServerResponse: Decodable {
+    // final output is a Train class
     var trains = [Train]()
 
     init(from decoder: Decoder) throws {
+        // get raw response from above struct
         let rawResponse = try RawServerResponse(from: decoder)
-
-        // Now you can pick items that are important to your data model,
-        // conveniently decoded into a Swift structure
         
+        // predictions are [G-10xxx : Data]
         var predictions = [String : RawServerResponse.Data]()
+        
+        // predictions with Stops Away don't have a G-10xxx so we have to handle them by the
+        // 36xx-38xx label instead
         var stopsAwayPredictions = [String : String]()
+        
+        // if there is a G-10xxx ID then it is a normal prediction, otherwise if that is nil
+        // it is a 'stops away' prediction
         for data in rawResponse.data {
             if data.relationships.vehicle.data?.id != nil {
                 predictions[(data.relationships.vehicle.data?.id)!] = data
@@ -200,6 +191,7 @@ struct SeparatedServerResponse: Decodable {
                 stopsAwayPredictions[(data.relationships.trip.data?.id)!] = data.attributes.status!
             }
         }
+        // splitting the 'included' part into two, vehicle and trip (based on the type in the JSON)
         var vehicles = [String : RawServerResponse.Included]()
         var trips = [String : RawServerResponse.Included]()
         for data in rawResponse.included {
@@ -209,25 +201,22 @@ struct SeparatedServerResponse: Decodable {
                 trips[(data.relationships.vehicle?.data?.id)!] = data
             }
         }
-//        print(predictions.keys)
-//        print(vehicles.keys)
-//        print(trips.keys)
         
+        // combines the data by the G-10xxx ID
         var combinedData = [CombinedData]()
         for id in predictions.keys {
             combinedData.append(CombinedData(id: id, prediction: predictions[id]!, vehicle: vehicles[id]!, trip: trips[id]!, stopsAway: nil))
         }
         
-//        print(combinedData)
         // MAYBE need to find a better way to do this because it loops again
+        // combines the stopsAway ones into the combinedData
         for train in combinedData {
             if let numAway = stopsAwayPredictions[(train.vehicle.attributes.label)!] {
                 train.stopsAway = numAway
             }
-
         }
-        //        print(combinedData)
         
+        //creates Train objects for each prediction
         for glTrain in combinedData {
             trains.append(Train(id: glTrain.id,
                                 route: (glTrain.prediction.relationships.route.data!.id)!,
@@ -242,6 +231,7 @@ struct SeparatedServerResponse: Decodable {
     }
 }
 
+//turns the string optional from JSON into a Date or remains a nil if it doesn't exist
 func getDateOrNilFromString(dateAsString: String?)-> Date? {
     if dateAsString != nil {
         return df.date(from: dateAsString!)
@@ -250,6 +240,7 @@ func getDateOrNilFromString(dateAsString: String?)-> Date? {
     }
 }
 
+// a class to combine a single train into one place with all the data available for that train
 class CombinedData : CustomStringConvertible {
     var id: String
     var prediction: RawServerResponse.Data
@@ -264,14 +255,20 @@ class CombinedData : CustomStringConvertible {
         self.trip = trip
         self.stopsAway = stopsAway
     }
+    
+    //custom string convertible description so it's possible to print
     var description: String {
-        return "ID: \(id)\n Route: \(prediction.relationships.route.data!.id)\n Headsign: \(trip.attributes.headsign)\n Direction: \(prediction.attributes.direction_id)\n Car Numbers: \(vehicle.attributes.label)\n Arrival Time: \(prediction.attributes.arrival_time)\n Departure Time: \(prediction.attributes.departure_time)\n Stops Away: \(stopsAway)\n\n"
+        var d = ""
+        d += "ID: \(id)\n"
+        d += "Route: \(String(describing: prediction.relationships.route.data!.id))\n"
+        d += "Headsign: \(String(describing: trip.attributes.headsign))\n"
+        d += "Direction: \(prediction.attributes.direction_id)\n"
+        d += "Car Numbers: \(String(describing: vehicle.attributes.label))\n"
+        d += "Arrival Time: \(String(describing: prediction.attributes.arrival_time))\n"
+        d += "Departure Time: \(String(describing: prediction.attributes.departure_time))\n"
+        d += "Stops Away: \(String(describing: stopsAway))\n\n"
+        return d
     }
 }
 
-// data -> # -> attributes -> arrival_time
-// data -> # -> attributes -> direction_id
-// data -> # -> attributes -> label
-// data -> # -> attributes -> status
-// data -> # -> relationships -> route -> data -> id
-//.timeIntervalSinceNow
+//.timeIntervalSinceNow gets seconds until date

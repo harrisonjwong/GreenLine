@@ -31,6 +31,6 @@ class Train : CustomStringConvertible {
     }
     
     var description: String {
-        return "\nID: \(id) \nRoute: \(route) \nHeadsign: \(headsign) \nDirection: \(direction) \nCar Numbers: \(carNumbers) \nArrival Time: \(arrivalTime) \nDeparture Time: \(departureTime) \nStops Away: \(stopsAway)\n\n"
+        return "\nID: \(id) \nRoute: \(route) \nHeadsign: \(headsign) \nDirection: \(direction) \nCar Numbers: \(carNumbers) \nArrival Time: \(String(describing: arrivalTime)) \nDeparture Time: \(String(describing: departureTime)) \nStops Away: \(String(describing: stopsAway))\n\n"
     }
 }
