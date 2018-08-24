@@ -11,11 +11,12 @@ import UIKit
 class FirstViewController: UIViewController {
     
     var store = GLStore()
+    var constants = Constants()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        store.fetchData(station: "place-pkrtm")
+        store.fetchData(station: "place-newto")
     }
 
     override func didReceiveMemoryWarning() {
