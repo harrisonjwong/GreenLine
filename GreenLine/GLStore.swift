@@ -180,7 +180,7 @@ struct SeparatedServerResponse: Decodable {
         
         // predictions with Stops Away don't have a G-10xxx so we have to handle them by the
         // 36xx-38xx label instead
-        var stopsAwayPredictions = [String : String]()
+        var stopsAwayPredictions = [String : RawServerResponse.Data]()
         
         // if there is a G-10xxx ID then it is a normal prediction, otherwise if that is nil
         // it is a 'stops away' prediction
@@ -188,7 +188,7 @@ struct SeparatedServerResponse: Decodable {
             if data.relationships.vehicle.data?.id != nil {
                 predictions[(data.relationships.vehicle.data?.id)!] = data
             } else {
-                stopsAwayPredictions[(data.relationships.trip.data?.id)!] = data.attributes.status!
+                stopsAwayPredictions[(data.relationships.trip.data?.id)!] = data
             }
         }
         // splitting the 'included' part into two, vehicle and trip (based on the type in the JSON)
@@ -208,15 +208,25 @@ struct SeparatedServerResponse: Decodable {
             combinedData.append(CombinedData(id: id, prediction: predictions[id]!, vehicle: vehicles[id]!, trip: trips[id]!, stopsAway: nil))
         }
         
-        // MAYBE need to find a better way to do this because it loops again
         // combines the stopsAway ones into the combinedData
+        // only if they are going in the same direction and the train number exists
+        // removes the value from stopsAwayPredictions; the remaining ones aren't duplicates
+        // and will be added later
         for train in combinedData {
             if let numAway = stopsAwayPredictions[(train.vehicle.attributes.label)!] {
-                train.stopsAway = numAway
+                if numAway.attributes.direction_id == train.prediction.attributes.direction_id {
+                    train.stopsAway = numAway.attributes.status!
+                    stopsAwayPredictions.removeValue(forKey: (train.vehicle.attributes.label)!)
+                }
             }
+//            } else {
+//                combinedData.append(CombinedData(id: nil, predictions)
+//            }
         }
         
-        //creates Train objects for each prediction
+        
+        
+        //creates Train objects for each prediction excluding ones that are only listed as stops away
         for glTrain in combinedData {
             trains.append(Train(id: glTrain.id,
                                 route: (glTrain.prediction.relationships.route.data!.id)!,
@@ -227,6 +237,20 @@ struct SeparatedServerResponse: Decodable {
                                 departureTime: getDateOrNilFromString(dateAsString: glTrain.prediction.attributes.departure_time),
                                 stopsAway: glTrain.stopsAway))
         }
+        
+        //creates Train objects for remaining 'stops away' predictions
+        for glTrain in stopsAwayPredictions {
+            trains.append(Train(id: nil,
+                                route: glTrain.value.relationships.route.data!.id!,
+                                headsign: getDestination(glTrain.value.relationships.route.data!.id!),
+                                direction: glTrain.value.attributes.direction_id,
+                                carNumbers: glTrain.key,
+                                arrivalTime: nil,
+                                departureTime: nil,
+                                stopsAway: glTrain.value.attributes.status))
+
+        }
+        
         
     }
 }
@@ -240,15 +264,31 @@ func getDateOrNilFromString(dateAsString: String?)-> Date? {
     }
 }
 
+//infers a destination from a route and direction
+func getDestination(_ route: String)-> String {
+    switch route {
+    case "Green-B":
+        return "Boston College"
+    case "Green-C":
+        return "Cleveland Circle"
+    case "Green-D":
+        return "Riverside"
+    case "Green-E":
+        return "Heath Street"
+    default:
+        return "Unexpected route"
+    }
+}
+
 // a class to combine a single train into one place with all the data available for that train
 class CombinedData : CustomStringConvertible {
-    var id: String
+    var id: String?
     var prediction: RawServerResponse.Data
     var vehicle: RawServerResponse.Included
     var trip: RawServerResponse.Included
     var stopsAway: String?
     
-    init(id: String, prediction: RawServerResponse.Data, vehicle: RawServerResponse.Included, trip: RawServerResponse.Included, stopsAway: String?) {
+    init(id: String?, prediction: RawServerResponse.Data, vehicle: RawServerResponse.Included, trip: RawServerResponse.Included, stopsAway: String?) {
         self.id = id
         self.prediction = prediction
         self.vehicle = vehicle
@@ -259,7 +299,7 @@ class CombinedData : CustomStringConvertible {
     //custom string convertible description so it's possible to print
     var description: String {
         var d = ""
-        d += "ID: \(id)\n"
+        d += "ID: \(String(describing: id))\n"
         d += "Route: \(String(describing: prediction.relationships.route.data!.id))\n"
         d += "Headsign: \(String(describing: trip.attributes.headsign))\n"
         d += "Direction: \(prediction.attributes.direction_id)\n"
