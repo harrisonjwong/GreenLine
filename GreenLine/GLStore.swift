@@ -214,6 +214,7 @@ struct SeparatedServerResponse: Decodable {
         // and will be added later
         for train in combinedData {
             if let numAway = stopsAwayPredictions[(train.vehicle.attributes.label)!] {
+//                train.nextStop = numAway.relationships.stop.data?.id
                 if numAway.attributes.direction_id == train.prediction.attributes.direction_id {
                     train.stopsAway = numAway.attributes.status!
                     stopsAwayPredictions.removeValue(forKey: (train.vehicle.attributes.label)!)
@@ -235,7 +236,8 @@ struct SeparatedServerResponse: Decodable {
                                 carNumbers: (glTrain.vehicle.attributes.label)!,
                                 arrivalTime: getDateOrNilFromString(dateAsString: glTrain.prediction.attributes.arrival_time),
                                 departureTime: getDateOrNilFromString(dateAsString: glTrain.prediction.attributes.departure_time),
-                                stopsAway: glTrain.stopsAway))
+                                stopsAway: glTrain.stopsAway,
+                                nextStop: glTrain.vehicle.relationships.stop?.data?.id))
         }
         
         //creates Train objects for remaining 'stops away' predictions
@@ -247,11 +249,21 @@ struct SeparatedServerResponse: Decodable {
                                 carNumbers: glTrain.key,
                                 arrivalTime: nil,
                                 departureTime: nil,
-                                stopsAway: glTrain.value.attributes.status))
+                                stopsAway: glTrain.value.attributes.status,
+                                nextStop: getNextStop(i: vehicles, trainNum: glTrain.key)))
 
         }
         
         
+    }
+    
+    func getNextStop(i: [String : RawServerResponse.Included], trainNum: String)-> String? {
+        for vehicle in i.values {
+            if vehicle.attributes.label! == trainNum {
+                return (vehicle.relationships.stop!.data?.id)!
+            }
+        }
+        return nil
     }
 }
 

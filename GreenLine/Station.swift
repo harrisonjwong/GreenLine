@@ -11,16 +11,19 @@ import Foundation
 class Station {
     let name: String
     let id: String
-    let routes: [String]
+    let platformID1: String
+    let platformID2: String
+//    let routes: [String]
 //    let trains: [Train]
     
-    init(name: String, id: String, routes: [String]) {
+    init(name: String, id: String, platformID1: String, platformID2: String) {
         self.name = name
         self.id = id
-        self.routes = routes
+        self.platformID1 = platformID1
+        self.platformID2 = platformID2
     }
 }
-
+/*
 struct Constants {
     let dBranchStations = [
         "Riverside" : Station(name: "Riverside", id: "place-river", routes: ["Green-D"]),
@@ -45,3 +48,4 @@ struct Constants {
         "Government Center" : Station(name: "Government Center", id: "place-gover", routes: ["Green-C", "Green-D", "Green-E"])]
     
 }
+*/

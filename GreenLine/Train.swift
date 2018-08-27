@@ -18,8 +18,9 @@ class Train : CustomStringConvertible {
     let arrivalTime: Date? // arrival time for all stations except downtown WB stations
     let departureTime: Date?
     let stopsAway: String? // stops away for downtown WB stations
+    let nextStop: String? // current location of train
     
-    init(id: String?, route: String, headsign: String?, direction: Int, carNumbers: String, arrivalTime: Date?, departureTime: Date?, stopsAway: String?) {
+    init(id: String?, route: String, headsign: String?, direction: Int, carNumbers: String, arrivalTime: Date?, departureTime: Date?, stopsAway: String?, nextStop: String?) {
         self.id = id
         self.route = route
         self.headsign = headsign
@@ -28,6 +29,7 @@ class Train : CustomStringConvertible {
         self.arrivalTime = arrivalTime
         self.departureTime = departureTime
         self.stopsAway = stopsAway
+        self.nextStop = nextStop
     }
     
     var description: String {
@@ -35,7 +37,8 @@ class Train : CustomStringConvertible {
         d += "\nID: \(String(describing: id)) \nRoute: \(route) \nHeadsign: \(String(describing: headsign)) \nDirection: \(direction) \nCar Numbers: \(carNumbers)"
         d += "\nArrival Time: \(String(describing: arrivalTime))"
         d += "\nDeparture Time: \(String(describing: departureTime))"
-        d += "\nStops Away: \(String(describing: stopsAway))\n\n"
+        d += "\nStops Away: \(String(describing: stopsAway))"
+        d += "\nNext stop: \(String(describing: nextStop))\n\n"
         return d
     }
     
