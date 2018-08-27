@@ -17,6 +17,9 @@ class StationStore {
         return URLSession(configuration: config)
     }()
     
+    var fullStationIDs = [String]()
+    var stations = [Station]()
+    
     func fetchData() {
         let urlAsURL = URL(string: url)
         let request = URLRequest(url: urlAsURL!)
@@ -27,6 +30,7 @@ class StationStore {
                 let decoder = JSONDecoder()
                 do {
                     let stuff = try decoder.decode(SeparatedServerResponseStations.self, from: jsonData)
+                    self.stations = stuff.stations
                     print(stuff)
                 } catch {
                     print("error trying to convert data to JSON")
@@ -53,6 +57,7 @@ class StationStore {
                 let decoder = JSONDecoder()
                 do {
                     let stuff = try decoder.decode(SeparatedServerResponseFullStations.self, from: jsonData)
+                    self.fullStationIDs = stuff.stations
                     print(stuff)
                 } catch {
                     print("error trying to convert data to JSON")
@@ -68,6 +73,7 @@ class StationStore {
         }
         task.resume()
     }
+    
 }
 
 struct RawServerResponseStations : Decodable {
