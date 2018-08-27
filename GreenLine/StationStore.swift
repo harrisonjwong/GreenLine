@@ -26,7 +26,7 @@ class StationStore {
             if let jsonData = data {
                 let decoder = JSONDecoder()
                 do {
-                    let stuff = try decoder.decode(SeparatedServerResponseStations.self, from: jsonData)
+                    let stuff = try decoder.decode(RawServerResponseStations.self, from: jsonData)
                     print(stuff)
                 } catch {
                     print("error trying to convert data to JSON")
@@ -47,22 +47,20 @@ class StationStore {
 struct RawServerResponseStations : Decodable {
     
     struct Data: Decodable {
-        var attributes: Attributes2
+        var attributes: Attributes
         var id: String
-        var relationships: Relationships2
     }
     
-    struct Attributes2: Decodable {
+    struct Attributes: Decodable {
         var name: String
     }
     
-    struct Relationships2: Decodable {
+    struct Relationships: Decodable {
         var child_stops: DataWithNameID
     }
     
     struct DataWithNameID: Decodable {
-        var data1: DataWithNameID2?
-        var data2: DataWithNameID2?
+        var data: [DataWithNameID2]
     }
     
     struct DataWithNameID2: Decodable {
@@ -79,8 +77,8 @@ struct SeparatedServerResponseStations : Decodable {
     init(from decoder: Decoder) throws {
         let rawResponse = try RawServerResponseStations(from: decoder)
         
-        for d in rawResponse.data {
-            stations.append(Station(name: d.attributes.name, id: d.id, platformID1: d.relationships.child_stops.data1?.id, platformID2: d.relationships.child_stops.data2?.id))
-        }
+//        for d in rawResponse.data {
+//            stations.append(Station(name: d.attributes.name, id: d.id, platformID1: d.relationships.child_stops.data1?.id, platformID2: d.relationships.child_stops.data2?.id))
+//        }
     }
 }
