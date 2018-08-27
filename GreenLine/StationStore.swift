@@ -42,6 +42,32 @@ class StationStore {
         }
         task.resume()
     }
+    
+    func fetchStationList() {
+        let urlAsURL = URL(string: "https://api-v3.mbta.com/stops?api_key=eb4cde2daae74dcfbbf324987283b2d4&filter[route_type]=0")
+        let request = URLRequest(url: urlAsURL!)
+        let task = session.dataTask(with: request) {
+            (data, response, error) -> Void in
+            
+            if let jsonData = data {
+                let decoder = JSONDecoder()
+                do {
+                    let stuff = try decoder.decode(SeparatedServerResponseFullStations.self, from: jsonData)
+                    print(stuff)
+                } catch {
+                    print("error trying to convert data to JSON")
+                    print(error)
+                }
+            }
+            else if let requestError = error {
+                print("Error: \(requestError)")
+            }
+            else {
+                print("Unexpected error")
+            }
+        }
+        task.resume()
+    }
 }
 
 struct RawServerResponseStations : Decodable {
@@ -83,3 +109,37 @@ struct SeparatedServerResponseStations : Decodable {
         }
     }
 }
+
+struct RawServerResponseFullStations: Decodable {
+    struct Data: Decodable {
+        var attributes: Attributes
+        var id: String
+    }
+    struct Attributes: Decodable {
+        var description: String
+    }
+    
+    var data: [Data]
+}
+
+struct SeparatedServerResponseFullStations: Decodable {
+    var stations = [String]()
+    
+    init(from decoder: Decoder) throws {
+        let rawResponse = try RawServerResponseFullStations(from: decoder)
+        
+        for d in rawResponse.data {
+            let line = getLine(d.attributes.description)
+            if line == "Green Line" {
+                stations.append(d.id)
+            }
+        }
+    }
+    
+    func getLine(_ description: String) -> String {
+        var components = description.components(separatedBy: " - ")
+        return components[1]
+    }
+    
+}
+
