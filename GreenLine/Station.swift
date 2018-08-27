@@ -24,6 +24,10 @@ class Station : CustomStringConvertible {
     }
     
     var description: String {
+        return "Station(name: \"\(name)\", id: \"\(id)\", platformID1: \"\(platformID1)\", platformID2: \"\(platformID2)\")"
+    }
+    
+    var description2: String {
         var d = ""
         d += "\nName: \(name)"
         d += "\nID: \(id)"

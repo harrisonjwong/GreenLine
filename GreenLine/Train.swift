@@ -10,6 +10,8 @@ import Foundation
 
 class Train : CustomStringConvertible {
     
+    var stationStore = StationStore()
+    
     let id: String? // G-10xxx
     let route: String // Green-B, Green-C, Green-D, Green-E
     let headsign: String? // Riverside
@@ -18,7 +20,7 @@ class Train : CustomStringConvertible {
     let arrivalTime: Date? // arrival time for all stations except downtown WB stations
     let departureTime: Date?
     let stopsAway: String? // stops away for downtown WB stations
-    let nextStop: String? // current location of train
+    var nextStop: String? // current location of train
     
     init(id: String?, route: String, headsign: String?, direction: Int, carNumbers: String, arrivalTime: Date?, departureTime: Date?, stopsAway: String?, nextStop: String?) {
         self.id = id
@@ -30,6 +32,12 @@ class Train : CustomStringConvertible {
         self.departureTime = departureTime
         self.stopsAway = stopsAway
         self.nextStop = nextStop
+        if nextStop != nil {
+            let name = stationStore.stationsByNumber[nextStop!]
+            self.nextStop = name
+        } else {
+            self.nextStop = nextStop
+        }
     }
     
     var description: String {
