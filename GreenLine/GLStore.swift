@@ -68,7 +68,7 @@ class GLStore {
                 let decoder = JSONDecoder()
                 do {
                     let stuff = try decoder.decode(SeparatedServerResponse.self, from: jsonData)
-                    print(stuff)
+//                    print(stuff)
                 } catch {
                     print("error trying to convert data to JSON")
                     print(error)

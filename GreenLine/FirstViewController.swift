@@ -12,13 +12,13 @@ class FirstViewController: UIViewController {
     
     var store = GLStore()
 //    var constants = Constants()
-//    var stationStore = StationStore()
+    var stationStore = StationStore()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         store.fetchData(station: "place-gover")
-//        stationStore.fetchData()
+        stationStore.fetchData()
     }
 
     override func didReceiveMemoryWarning() {
