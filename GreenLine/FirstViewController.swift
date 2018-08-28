@@ -17,9 +17,9 @@ class FirstViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        store.fetchData(station: "place-gover")
-        stationStore.fetchStationList()
-        stationStore.fetchData()
+        store.fetchData(station: "place-pktrm")
+//        stationStore.fetchStationList()
+//        stationStore.fetchData()
     }
     
     override func didReceiveMemoryWarning() {

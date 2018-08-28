@@ -11,28 +11,25 @@ import Foundation
 class Station : CustomStringConvertible {
     let name: String
     let id: String
-    let platformID1: String
-    let platformID2: String
+    let platforms: [String]
 //    let routes: [String]
 //    let trains: [Train]
     
-    init(name: String, id: String, platformID1: String, platformID2: String) {
+    init(name: String, id: String, platforms: [String]) {
         self.name = name
         self.id = id
-        self.platformID1 = platformID1
-        self.platformID2 = platformID2
+        self.platforms = platforms
     }
     
     var description: String {
-        return "Station(name: \"\(name)\", id: \"\(id)\", platformID1: \"\(platformID1)\", platformID2: \"\(platformID2)\")"
+        return "\"\(name)\" : Station(name: \"\(name)\", id: \"\(id)\", platforms: \(platforms))"
     }
     
     var description2: String {
         var d = ""
         d += "\nName: \(name)"
         d += "\nID: \(id)"
-        d += "\nPlatformID1: \(String(describing: platformID1))"
-        d += "\nPlatformID2: \(String(describing: platformID2))\n\n"
+        d += "\nPlatforms: \(platforms))"
         return d
     }
 }

@@ -33,7 +33,7 @@ class Train : CustomStringConvertible {
         self.stopsAway = stopsAway
         self.nextStop = nextStop
         if nextStop != nil {
-            let name = stationStore.stationsByNumber[nextStop!]
+            let name = stationStore.stationsByID[nextStop!]
             self.nextStop = name
         } else {
             self.nextStop = nextStop
