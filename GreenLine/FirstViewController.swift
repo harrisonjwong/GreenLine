@@ -11,22 +11,21 @@ import UIKit
 class FirstViewController: UIViewController {
     
     var store = GLStore()
-//    var constants = Constants()
+    //    var constants = Constants()
     var stationStore = StationStore()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        store.fetchData(station: "place-newto")
-//        stationStore.fetchData()
-//        stationStore.fetchLineStations()
+        store.fetchData(station: "place-gover")
+        stationStore.fetchStationList()
+        stationStore.fetchData()
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
+    
+    
 }
-
