@@ -68,7 +68,7 @@ class GLStore {
                 let decoder = JSONDecoder()
                 do {
                     let stuff = try decoder.decode(SeparatedServerResponse.self, from: jsonData)
-                    print(stuff)
+                    print(stuff.trains.sorted(by: self.compareTrainsTime))
                 } catch {
                     print("error trying to convert data to JSON")
                     print(error)
@@ -82,6 +82,13 @@ class GLStore {
             }
         }
         task.resume()
+    }
+    
+    func compareTrainsTime(_ t1: Train, _ t2: Train) -> Bool {
+        if t1.arrivalTime != nil && t2.arrivalTime != nil {
+            return t1.arrivalTime!.timeIntervalSinceNow <= t2.arrivalTime!.timeIntervalSinceNow
+        }
+        return false
     }
     
 }

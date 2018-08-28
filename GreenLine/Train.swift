@@ -43,16 +43,21 @@ class Train : CustomStringConvertible {
     var description: String {
         var d = ""
         d += "\nID: \(String(describing: id)) \nRoute: \(route) \nHeadsign: \(String(describing: headsign)) \nDirection: \(direction) \nCar Numbers: \(carNumbers)"
-        d += "\nArrival Time: \(String(describing: arrivalTime))"
-        d += "\nDeparture Time: \(String(describing: departureTime))"
+        d += "\nArrival Time: \(getTimeInMinSec(arrivalTime))"
+        d += "\nDeparture Time: \(getTimeInMinSec(departureTime))"
         d += "\nStops Away: \(String(describing: stopsAway))"
         d += "\nNext stop: \(String(describing: nextStop))\n\n"
         return d
     }
     
-    func getTimeInMinSec(_ d: Date)-> String {
-        let min = floor(d.timeIntervalSinceNow/60)
-        let sec = round(d.timeIntervalSinceNow.truncatingRemainder(dividingBy: 60))
-        return "\(min)m \(sec)s"
+    func getTimeInMinSec(_ d: Date?)-> String? {
+        if d != nil {
+            let min = floor(d!.timeIntervalSinceNow/60)
+            let sec = round(d!.timeIntervalSinceNow.truncatingRemainder(dividingBy: 60))
+            return "\(min)m \(sec)s"
+        }
+        return nil
     }
+    
+
 }
