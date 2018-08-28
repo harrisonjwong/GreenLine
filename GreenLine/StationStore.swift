@@ -17,6 +17,9 @@ class StationStore {
         return URLSession(configuration: config)
     }()
     
+    var fullStationIDs = [String]()
+    var stations = [Station]()
+    
     func fetchData() {
         let urlAsURL = URL(string: url)
         let request = URLRequest(url: urlAsURL!)
@@ -27,6 +30,34 @@ class StationStore {
                 let decoder = JSONDecoder()
                 do {
                     let stuff = try decoder.decode(SeparatedServerResponseStations.self, from: jsonData)
+                    self.stations = stuff.stations
+                    print(stuff)
+                } catch {
+                    print("error trying to convert data to JSON")
+                    print(error)
+                }
+            }
+            else if let requestError = error {
+                print("Error: \(requestError)")
+            }
+            else {
+                print("Unexpected error")
+            }
+        }
+        task.resume()
+    }
+    
+    func fetchStationList() {
+        let urlAsURL = URL(string: "https://api-v3.mbta.com/stops?api_key=eb4cde2daae74dcfbbf324987283b2d4&filter[route_type]=0")
+        let request = URLRequest(url: urlAsURL!)
+        let task = session.dataTask(with: request) {
+            (data, response, error) -> Void in
+            
+            if let jsonData = data {
+                let decoder = JSONDecoder()
+                do {
+                    let stuff = try decoder.decode(SeparatedServerResponseFullStations.self, from: jsonData)
+                    self.fullStationIDs = stuff.stations
                     print(stuff)
                 } catch {
                     print("error trying to convert data to JSON")
@@ -146,3 +177,37 @@ struct StationListingServerResponse : Decodable {
 //        stations.reverse()
     }
 }
+
+struct RawServerResponseFullStations: Decodable {
+    struct Data: Decodable {
+        var attributes: Attributes
+        var id: String
+    }
+    struct Attributes: Decodable {
+        var description: String
+    }
+    
+    var data: [Data]
+}
+
+struct SeparatedServerResponseFullStations: Decodable {
+    var stations = [String]()
+    
+    init(from decoder: Decoder) throws {
+        let rawResponse = try RawServerResponseFullStations(from: decoder)
+        
+        for d in rawResponse.data {
+            let line = getLine(d.attributes.description)
+            if line == "Green Line" {
+                stations.append(d.id)
+            }
+        }
+    }
+    
+    func getLine(_ description: String) -> String {
+        var components = description.components(separatedBy: " - ")
+        return components[1]
+    }
+    
+}
+
