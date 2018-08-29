@@ -236,6 +236,10 @@ struct SeparatedServerResponse: Decodable {
         
         //creates Train objects for each prediction excluding ones that are only listed as stops away
         for glTrain in combinedData {
+            // if the status (like "stopped 1 stop away") is there, include it instead of the stopsAway
+            if glTrain.prediction.attributes.status != nil {
+                glTrain.stopsAway = glTrain.prediction.attributes.status
+            }
             trains.append(Train(id: glTrain.id,
                                 route: (glTrain.prediction.relationships.route.data!.id)!,
                                 headsign: (glTrain.trip.attributes.headsign)!,
