@@ -14,6 +14,6 @@ class SinglePredictionCell : UITableViewCell {
     @IBOutlet var destinationLabel: UILabel!
     @IBOutlet var predictionLabel: UILabel!
     @IBOutlet var numbersLabel: UILabel!
-    @IBOutlet var lineLabel: UILabel!
+    @IBOutlet var lineImage: UIImageView!
     
 }

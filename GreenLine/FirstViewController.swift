@@ -16,6 +16,8 @@ class FirstViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.estimatedRowHeight = 100
         // Do any additional setup after loading the view, typically from a nib.
 //        store.fetchData(station: "place-pktrm")
 //        stationStore.fetchStationList()
@@ -45,41 +47,45 @@ class FirstViewController: UITableViewController {
         print("here?")
         
         cell.destinationLabel.text = prediction.headsign
-        if prediction.arrivalTime == nil {
-            cell.predictionLabel.text = "\(prediction.arrivalTime) (next stop: \(prediction.nextStop))"
+        if prediction.arrivalTime != nil {
+            cell.predictionLabel.text = "\(getTimeInMinSec(prediction.arrivalTime)!) (next stop: \(prediction.nextStop ?? ""))"
         } else {
             cell.predictionLabel.text = "\(prediction.stopsAway) (next stop: \(prediction.nextStop))"
         }
 
         cell.numbersLabel.text = prediction.carNumbers
-        addLineImage(cell.lineLabel, route: prediction.route, direction: prediction.direction)
-        
+        addLineImage(cell.lineImage, route: prediction.route, direction: prediction.direction)
         return cell
     }
     
-    func addLineImage(_ label: UILabel, route: String, direction: Int) {
-        let attachment = NSTextAttachment()
+    func addLineImage(_ imageView: UIImageView, route: String, direction: Int) {
         if direction == 1 {
-            attachment.image = UIImage(named: "Green Line.png")
+            imageView.image = #imageLiteral(resourceName: "Green Line")
         } else {
             switch route {
             case "Green-B":
-                attachment.image = UIImage(named: "Green Line B.png")
+                imageView.image = #imageLiteral(resourceName: "Green Line B")
             case "Green-C":
-                attachment.image = UIImage(named: "Green Line C.png")
+                imageView.image = #imageLiteral(resourceName: "Green Line C")
             case "Green-D":
-                attachment.image = UIImage(named: "Green Line D.png")
+                imageView.image = #imageLiteral(resourceName: "Green Line D")
             case "Green-E":
-                attachment.image = UIImage(named: "Green Line E.png")
+                imageView.image = #imageLiteral(resourceName: "Green Line E")
             default:
-                attachment.image = UIImage(named: "Green Line.png")
+                imageView.image = #imageLiteral(resourceName: "Green Line")
             }
         }
-        attachment.image = UIImage(named: "Green Line.png")
-        let attachmentString = NSAttributedString(attachment: attachment)
-        let myString = NSMutableAttributedString(string: "")
-        myString.append(attachmentString)
-        label.attributedText = myString
+    }
+    
+    
+    func getTimeInMinSec(_ d: Date?)-> String? {
+        if d != nil {
+            let min = round(d!.timeIntervalSinceNow/60)
+            let min2 = Int(min)
+            let sec = round(d!.timeIntervalSinceNow.truncatingRemainder(dividingBy: 60))
+            return "\(min2) min"
+        }
+        return nil
     }
     
 }
