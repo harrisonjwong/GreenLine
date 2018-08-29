@@ -19,6 +19,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        let rootViewController = window!.rootViewController as! UITabBarController
 //        let firstViewController = rootViewController.topViewController as! FirstViewController
 //        firstViewController.store = GLStore()
+        
+        let glStore = GLStore()
+        glStore.fetchData(station: "place-pktrm")
+        print(glStore.allTrains)
+        let firstViewController = window!.rootViewController?.childViewControllers[0].childViewControllers[0] as! FirstViewController
+        firstViewController.store = glStore
+        
         return true
     }
 

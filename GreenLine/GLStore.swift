@@ -17,6 +17,8 @@ let df: DateFormatter = {
 
 class GLStore {
     
+    var allTrains: [Train] = []
+    
     //options that allow us to select the Green Line and predictions
     var options = ["filter[route]": "Green-B,Green-C,Green-D,Green-E", "include": "vehicle,trip"]
     
@@ -68,7 +70,9 @@ class GLStore {
                 let decoder = JSONDecoder()
                 do {
                     let stuff = try decoder.decode(SeparatedServerResponse.self, from: jsonData)
-                    print(stuff.trains.sorted(by: self.compareTrainsTime))
+                    self.allTrains = stuff.trains
+                    print(self.allTrains)
+//                    print(stuff.trains.sorted(by: self.compareTrainsTime))
                 } catch {
                     print("error trying to convert data to JSON")
                     print(error)

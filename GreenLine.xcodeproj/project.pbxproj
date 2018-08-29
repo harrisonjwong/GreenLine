@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		27BABF7621371DFC001A1C7C /* SinglePredictionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BABF7521371DFC001A1C7C /* SinglePredictionCell.swift */; };
 		6407FB98212683A4009686B7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6407FB97212683A4009686B7 /* AppDelegate.swift */; };
 		6407FB9A212683A4009686B7 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6407FB99212683A4009686B7 /* FirstViewController.swift */; };
 		6407FB9C212683A4009686B7 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6407FB9B212683A4009686B7 /* SecondViewController.swift */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		27BABF7521371DFC001A1C7C /* SinglePredictionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SinglePredictionCell.swift; sourceTree = "<group>"; };
 		6407FB94212683A4009686B7 /* GreenLine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GreenLine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6407FB97212683A4009686B7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6407FB99212683A4009686B7 /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
@@ -72,6 +74,7 @@
 				6421D5642127894700E977E6 /* Station.swift */,
 				6407FB9B212683A4009686B7 /* SecondViewController.swift */,
 				6407FB9D212683A4009686B7 /* Main.storyboard */,
+				27BABF7521371DFC001A1C7C /* SinglePredictionCell.swift */,
 				6407FBA0212683A7009686B7 /* Assets.xcassets */,
 				6407FBA2212683A7009686B7 /* LaunchScreen.storyboard */,
 				6407FBA5212683A7009686B7 /* Info.plist */,
@@ -150,6 +153,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27BABF7621371DFC001A1C7C /* SinglePredictionCell.swift in Sources */,
 				6421D56121277B5000E977E6 /* GLStore.swift in Sources */,
 				6407FB9C212683A4009686B7 /* SecondViewController.swift in Sources */,
 				649D9709213450BE009EB572 /* StationStore.swift in Sources */,
