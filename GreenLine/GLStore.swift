@@ -209,7 +209,7 @@ struct SeparatedServerResponse: Decodable {
         for data in rawResponse.included {
             if data.type == "vehicle" {
                 vehicles[data.id] = data
-            } else {
+            } else if data.type == "trip" && data.relationships.vehicle?.data?.id != nil {
                 trips[(data.relationships.vehicle?.data?.id)!] = data
             }
         }
@@ -233,7 +233,7 @@ struct SeparatedServerResponse: Decodable {
                 }
             }
 //            } else {
-//                combinedData.append(CombinedData(id: nil, predictions)
+//                combinedData.append(CombinedData(id: nil, predictions))
 //            }
         }
         
@@ -256,19 +256,21 @@ struct SeparatedServerResponse: Decodable {
                                 nextStop: glTrain.vehicle.relationships.stop?.data?.id))
         }
         
-        //creates Train objects for remaining 'stops away' predictions
-        for glTrain in stopsAwayPredictions {
-            trains.append(Train(id: nil,
-                                route: glTrain.value.relationships.route.data!.id!,
-                                headsign: getDestination(glTrain.value.relationships.route.data!.id!),
-                                direction: glTrain.value.attributes.direction_id,
-                                carNumbers: glTrain.key,
-                                arrivalTime: nil,
-                                departureTime: nil,
-                                stopsAway: glTrain.value.attributes.status,
-                                nextStop: getNextStop(i: vehicles, trainNum: glTrain.key)))
-
-        }
+        combinedData.sort()
+        
+//        //creates Train objects for remaining 'stops away' predictions
+//        for glTrain in stopsAwayPredictions {
+//            trains.append(Train(id: nil,
+//                                route: glTrain.value.relationships.route.data!.id!,
+//                                headsign: getDestination(glTrain.value.relationships.route.data!.id!),
+//                                direction: glTrain.value.attributes.direction_id,
+//                                carNumbers: glTrain.key,
+//                                arrivalTime: nil,
+//                                departureTime: nil,
+//                                stopsAway: glTrain.value.attributes.status,
+//                                nextStop: getNextStop(i: vehicles, trainNum: glTrain.key)))
+//
+//        }
         
         
     }
@@ -293,23 +295,25 @@ func getDateOrNilFromString(dateAsString: String?)-> Date? {
 }
 
 //infers a destination from a route and direction
-func getDestination(_ route: String)-> String {
-    switch route {
-    case "Green-B":
-        return "Boston College"
-    case "Green-C":
-        return "Cleveland Circle"
-    case "Green-D":
-        return "Riverside"
-    case "Green-E":
-        return "Heath Street"
-    default:
-        return "Unexpected route"
-    }
-}
+//func getDestination(_ route: String)-> String {
+//    switch route {
+//    case "Green-B":
+//        return "Boston College"
+//    case "Green-C":
+//        return "Cleveland Circle"
+//    case "Green-D":
+//        return "Riverside"
+//    case "Green-E":
+//        return "Heath Street"
+//    default:
+//        return "Unexpected route"
+//    }
+//}
 
 // a class to combine a single train into one place with all the data available for that train
-class CombinedData : CustomStringConvertible {
+class CombinedData : CustomStringConvertible, Comparable {
+
+    
     var id: String?
     var prediction: RawServerResponse.Data
     var vehicle: RawServerResponse.Included
@@ -337,6 +341,29 @@ class CombinedData : CustomStringConvertible {
         d += "Stops Away: \(String(describing: stopsAway))\n\n"
         return d
     }
+    
+    static func < (lhs: CombinedData, rhs: CombinedData) -> Bool {
+        if let arr1 = lhs.prediction.attributes.arrival_time,
+            let arr2 = rhs.prediction.attributes.arrival_time {
+            let d1 = df.date(from: arr1)
+            let d2 = df.date(from: arr2)
+            return (d1!.compare(d2!)).rawValue < 0
+        }
+        return false
+    }
+   
+
+    static func == (lhs: CombinedData, rhs: CombinedData) -> Bool {
+        if let arr1 = lhs.prediction.attributes.arrival_time,
+            let arr2 = rhs.prediction.attributes.arrival_time {
+            let d1 = df.date(from: arr1)
+            let d2 = df.date(from: arr2)
+            return (d1!.compare(d2!)).rawValue == 0
+        }
+        return false
+    }
+
+    
 }
 
 //.timeIntervalSinceNow gets seconds until date

@@ -12,18 +12,17 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
-
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 //        let rootViewController = window!.rootViewController as! UITabBarController
 //        let firstViewController = rootViewController.topViewController as! FirstViewController
 //        firstViewController.store = GLStore()
         
         let glStore = GLStore()
-        glStore.fetchData(station: "place-newto")
+        glStore.fetchData(station: "place-pktrm")
         print(glStore.allTrains)
-        let firstViewController = window!.rootViewController?.childViewControllers[0].childViewControllers[0] as! FirstViewController
+        let firstViewController = window!.rootViewController?.children[0].children[0] as! FirstViewController
         firstViewController.store = glStore
         
         return true

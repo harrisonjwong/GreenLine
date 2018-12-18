@@ -43,14 +43,14 @@ class FirstViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SinglePredictionCell", for: indexPath) as! SinglePredictionCell
         
         let prediction = store.allTrains[indexPath.row]
-        print(prediction)
-        print("here?")
+//        print(prediction)
+//        print("here?")
         
         cell.destinationLabel.text = prediction.headsign
         if prediction.arrivalTime != nil {
-            cell.predictionLabel.text = "\(getTimeInMinSec(prediction.arrivalTime)!) (next stop: \(prediction.nextStop ?? ""))"
+            cell.predictionLabel.text = "\(getTimeInMinSec(prediction.arrivalTime, prediction.departureTime)!) (next: \(prediction.nextStop ?? "Unavailable"))"
         } else {
-            cell.predictionLabel.text = "\(prediction.stopsAway) (next stop: \(prediction.nextStop))"
+            cell.predictionLabel.text = "\(prediction.stopsAway ?? "") (next: \(prediction.nextStop ?? "Unavailable"))"
         }
 
         cell.numbersLabel.text = prediction.carNumbers
@@ -78,11 +78,19 @@ class FirstViewController: UITableViewController {
     }
     
     
-    func getTimeInMinSec(_ d: Date?)-> String? {
+    func getTimeInMinSec(_ d: Date?, _ d2: Date?)-> String? {
         if d != nil {
             let min = round(d!.timeIntervalSinceNow/60)
             let min2 = Int(min)
-            let sec = round(d!.timeIntervalSinceNow.truncatingRemainder(dividingBy: 60))
+//            let sec = round(d!.timeIntervalSinceNow.truncatingRemainder(dividingBy: 60))
+            if min2 == 0 {
+                return "ARR"
+            } else if d2 != nil {
+                let min3 = round(d2!.timeIntervalSinceNow/60)
+                if min3 <= 0 {
+                    return "BRD"
+                }
+            }
             return "\(min2) min"
         }
         return nil
