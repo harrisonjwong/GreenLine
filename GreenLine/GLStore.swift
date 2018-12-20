@@ -258,19 +258,19 @@ struct SeparatedServerResponse: Decodable {
         
         combinedData.sort()
         
-//        //creates Train objects for remaining 'stops away' predictions
-//        for glTrain in stopsAwayPredictions {
-//            trains.append(Train(id: nil,
-//                                route: glTrain.value.relationships.route.data!.id!,
-//                                headsign: getDestination(glTrain.value.relationships.route.data!.id!),
-//                                direction: glTrain.value.attributes.direction_id,
-//                                carNumbers: glTrain.key,
-//                                arrivalTime: nil,
-//                                departureTime: nil,
-//                                stopsAway: glTrain.value.attributes.status,
-//                                nextStop: getNextStop(i: vehicles, trainNum: glTrain.key)))
-//
-//        }
+        //creates Train objects for remaining 'stops away' predictions
+        for glTrain in stopsAwayPredictions {
+            trains.append(Train(id: nil,
+                                route: glTrain.value.relationships.route.data!.id!,
+                                headsign: getDestination(glTrain.value.relationships.route.data!.id!),
+                                direction: glTrain.value.attributes.direction_id,
+                                carNumbers: "tbd",
+                                arrivalTime: getDateOrNilFromString(dateAsString: glTrain.value.attributes.arrival_time),
+                                departureTime: getDateOrNilFromString(dateAsString: glTrain.value.attributes.departure_time),
+                                stopsAway: glTrain.value.attributes.status,
+                                nextStop: getNextStop(i: vehicles, trainNum: glTrain.key)))
+
+        }
         
         
     }
@@ -295,20 +295,20 @@ func getDateOrNilFromString(dateAsString: String?)-> Date? {
 }
 
 //infers a destination from a route and direction
-//func getDestination(_ route: String)-> String {
-//    switch route {
-//    case "Green-B":
-//        return "Boston College"
-//    case "Green-C":
-//        return "Cleveland Circle"
-//    case "Green-D":
-//        return "Riverside"
-//    case "Green-E":
-//        return "Heath Street"
-//    default:
-//        return "Unexpected route"
-//    }
-//}
+func getDestination(_ route: String)-> String {
+    switch route {
+    case "Green-B":
+        return "Boston College"
+    case "Green-C":
+        return "Cleveland Circle"
+    case "Green-D":
+        return "Riverside"
+    case "Green-E":
+        return "Heath Street"
+    default:
+        return "Unexpected route"
+    }
+}
 
 // a class to combine a single train into one place with all the data available for that train
 class CombinedData : CustomStringConvertible, Comparable {
