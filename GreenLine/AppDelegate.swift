@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        firstViewController.store = GLStore()
         
         let glStore = GLStore()
-        glStore.fetchData(station: "place-pktrm")
+        glStore.fetchData(station: "place-chhil")
         print(glStore.allTrains)
         let firstViewController = window!.rootViewController?.children[0].children[0] as! FirstViewController
         firstViewController.store = glStore

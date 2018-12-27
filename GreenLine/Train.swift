@@ -16,13 +16,13 @@ class Train : CustomStringConvertible {
     let route: String // Green-B, Green-C, Green-D, Green-E
     let headsign: String? // Riverside
     let direction: Int // 0 = Westbound, 1 = Eastbound
-    let carNumbers: String // 36xx-38xx
+    let carNumbers: String? // 36xx-38xx
     let arrivalTime: Date? // arrival time for all stations except downtown WB stations
     let departureTime: Date?
     let stopsAway: String? // stops away for downtown WB stations
     var nextStop: String? // current location of train
     
-    init(id: String?, route: String, headsign: String?, direction: Int, carNumbers: String, arrivalTime: Date?, departureTime: Date?, stopsAway: String?, nextStop: String?) {
+    init(id: String?, route: String, headsign: String?, direction: Int, carNumbers: String?, arrivalTime: Date?, departureTime: Date?, stopsAway: String?, nextStop: String?) {
         self.id = id
         self.route = route
         self.headsign = headsign
