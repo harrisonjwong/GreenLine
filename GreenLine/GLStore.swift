@@ -348,22 +348,6 @@ struct SeparatedServerResponse: Decodable {
         }
         
         combinedData.sort()
-        
-        //creates Train objects for remaining 'stops away' predictions
-        for glTrain in stopsAwayPredictions {
-            trains.append(Train(id: nil,
-                                route: glTrain.value.relationships.route.data!.id!,
-                                headsign: getDestination(glTrain.value.relationships.route.data!.id!),
-                                direction: glTrain.value.attributes.direction_id,
-                                carNumbers: "tbd",
-                                arrivalTime: getDateOrNilFromString(dateAsString: glTrain.value.attributes.arrival_time),
-                                departureTime: getDateOrNilFromString(dateAsString: glTrain.value.attributes.departure_time),
-                                stopsAway: glTrain.value.attributes.status,
-                                nextStop: getNextStop(i: vehicles, trainNum: glTrain.key)))
-
-        }
-        
-        
     }
     
     func getNextStop(i: [String : RawServerResponse.Included], trainNum: String)-> String? {
