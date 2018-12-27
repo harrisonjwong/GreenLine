@@ -69,7 +69,7 @@ class GLStore {
             if let jsonData = data {
                 let decoder = JSONDecoder()
                 do {
-                    let stuff = try decoder.decode(SeparatedServerResponse2.self, from: jsonData)
+                    let stuff = try decoder.decode(SeparatedServerResponse.self, from: jsonData)
                     self.allTrains = stuff.trains.sorted(by: self.compareTrainsTime)
 //                    print(self.allTrains)
 //                    print(stuff.trains.sorted(by: self.compareTrainsTime))
@@ -285,7 +285,7 @@ struct RawServerResponse: Codable {
 //    }
 //}
 
-struct SeparatedServerResponse2: Decodable {
+struct SeparatedServerResponse: Decodable {
     // final output is a Train class
     var trains = [Train]()
     
@@ -300,9 +300,9 @@ struct SeparatedServerResponse2: Decodable {
         for data in rawResponse.data {
             predictions[data.relationships.trip.data!.id!] = data
         }
-        print(predictions.keys)
         
         // splitting the 'included' part into two, vehicle and trip (based on the type in the JSON)
+        // the TripID is the key
         var vehicles = [String : RawServerResponse.Included]()
         var trips = [String : RawServerResponse.Included]()
         for data in rawResponse.included {
@@ -312,59 +312,35 @@ struct SeparatedServerResponse2: Decodable {
                 trips[data.id] = data
             }
         }
-        print("Vehicles and Trips")
-        print(vehicles.keys)
-        print(trips.keys)
         
-        print("IDS")
         // combines the data by the TripID
         var combinedData = [CombinedData]()
         for id in predictions.keys {
-            print(id)
             combinedData.append(CombinedData(id: id, prediction: predictions[id]!, vehicle: vehicles[id], trip: trips[id]!, stopsAway: nil))
         }
         
-        // combines the stopsAway ones into the combinedData
-        // only if they are going in the same direction and the train number exists
-        // removes the value from stopsAwayPredictions; the remaining ones aren't duplicates
-        // and will be added later
-//        for train in combinedData {
-//            if let numAway = stopsAwayPredictions[(train.vehicle.attributes.label)!] {
-//                if numAway.attributes.direction_id == train.prediction.attributes.direction_id {
-//                    train.stopsAway = numAway.attributes.status!
-//                    stopsAwayPredictions.removeValue(forKey: (train.vehicle.attributes.label)!)
-//                }
-//            }
-//        }
-//        for train in combinedData {
-//            if train.prediction.attributes.arrival_time == nil {
-//
-//            }
-//        }
-        
-        
-        
-        //creates Train objects for each prediction excluding ones that are only listed as stops away
+        //creates Train objects for each prediction
         for glTrain in combinedData {
             // if the status (like "stopped 1 stop away") is there, include it instead of the stopsAway
             if glTrain.prediction.attributes.status != nil {
                 glTrain.stopsAway = glTrain.prediction.attributes.status
             }
-            var carNumber: String
-            var nextStop: String
+            // if glTrain.vehicle is not nil, then the carNumbers and nextStop will be the value
+            var carNumbers: String?
+            var nextStop: String?
             if let trainData = glTrain.vehicle {
-                carNumber = trainData.attributes.label!
+                carNumbers = trainData.attributes.label!
                 nextStop = (trainData.relationships.stop?.data?.id!)!
             } else {
-                carNumber = "NO"
-                nextStop = "NO"
+                carNumbers = nil
+                nextStop = nil
             }
             
             trains.append(Train(id: glTrain.id,
                                 route: (glTrain.prediction.relationships.route.data!.id)!,
                                 headsign: (glTrain.trip.attributes.headsign)!,
                                 direction: glTrain.prediction.attributes.direction_id,
-                                carNumbers: carNumber,
+                                carNumbers: carNumbers,
                                 arrivalTime: getDateOrNilFromString(dateAsString: glTrain.prediction.attributes.arrival_time),
                                 departureTime: getDateOrNilFromString(dateAsString: glTrain.prediction.attributes.departure_time),
                                 stopsAway: glTrain.stopsAway,

@@ -42,7 +42,7 @@ class Train : CustomStringConvertible {
     
     var description: String {
         var d = ""
-        d += "\nID: \(String(describing: id)) \nRoute: \(route) \nHeadsign: \(String(describing: headsign)) \nDirection: \(direction) \nCar Numbers: \(carNumbers)"
+        d += "\nID: \(String(describing: id)) \nRoute: \(route) \nHeadsign: \(String(describing: headsign)) \nDirection: \(direction) \nCar Numbers: \(String(describing: carNumbers))"
         d += "\nArrival Time: \(String(describing: getTimeInMinSec(arrivalTime)))"
         d += "\nDeparture Time: \(String(describing: getTimeInMinSec(departureTime)))"
         d += "\nStops Away: \(String(describing: stopsAway))"
