@@ -300,7 +300,6 @@ struct SeparatedServerResponse: Decodable {
         for data in rawResponse.data {
             predictions[data.relationships.trip.data!.id!] = data
         }
-        print(predictions.keys)
         
         // splitting the 'included' part into two, vehicle and trip (based on the type in the JSON)
         // the TripID is the key
@@ -317,7 +316,6 @@ struct SeparatedServerResponse: Decodable {
         // combines the data by the TripID
         var combinedData = [CombinedData]()
         for id in predictions.keys {
-            print(id)
             combinedData.append(CombinedData(id: id, prediction: predictions[id]!, vehicle: vehicles[id], trip: trips[id]!, stopsAway: nil))
         }
         
