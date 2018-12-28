@@ -86,7 +86,7 @@ class GLStore {
             }
         }
         task.resume()
-        sleep(4)
+        sleep(2)
     }
     
     func compareTrainsTime(_ t1: Train, _ t2: Train) -> Bool {

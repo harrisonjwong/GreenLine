@@ -16,6 +16,7 @@ class FirstViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        refreshControl?.addTarget(self, action: #selector(refreshGLStore), for: .valueChanged)
         
         tableView.estimatedRowHeight = 100
         // Do any additional setup after loading the view, typically from a nib.
@@ -94,6 +95,13 @@ class FirstViewController: UITableViewController {
             return "\(min2) min"
         }
         return nil
+    }
+    
+    @objc private func refreshGLStore() {
+        store.allTrains.removeAll()
+        store.fetchData(station: "place-chhil")
+        tableView.reloadData()
+        refreshControl?.endRefreshing()
     }
     
 }
