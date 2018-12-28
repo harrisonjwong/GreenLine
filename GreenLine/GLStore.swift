@@ -372,20 +372,20 @@ func getDateOrNilFromString(dateAsString: String?)-> Date? {
 }
 
 //infers a destination from a route and direction
-//func getDestination(_ route: String)-> String {
-//    switch route {
-//    case "Green-B":
-//        return "Boston College"
-//    case "Green-C":
-//        return "Cleveland Circle"
-//    case "Green-D":
-//        return "Riverside"
-//    case "Green-E":
-//        return "Heath Street"
-//    default:
-//        return "Unexpected route"
-//    }
-//}
+func getDestination(_ route: String)-> String {
+    switch route {
+    case "Green-B":
+        return "Boston College"
+    case "Green-C":
+        return "Cleveland Circle"
+    case "Green-D":
+        return "Riverside"
+    case "Green-E":
+        return "Heath Street"
+    default:
+        return "Unexpected route"
+    }
+}
 
 // a class to combine a single train into one place with all the data available for that train
 class CombinedData : CustomStringConvertible, Comparable {
