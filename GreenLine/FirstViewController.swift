@@ -44,17 +44,16 @@ class FirstViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SinglePredictionCell", for: indexPath) as! SinglePredictionCell
         
         let prediction = store.allTrains[indexPath.row]
-//        print(prediction)
-//        print("here?")
         
         cell.destinationLabel.text = prediction.headsign
-        if prediction.arrivalTime != nil {
-            cell.predictionLabel.text = "\(getTimeInMinSec(prediction.arrivalTime, prediction.departureTime)!) (next: \(prediction.nextStop ?? "Unavailable"))"
-        } else {
-            cell.predictionLabel.text = "\(prediction.stopsAway ?? "") (next: \(prediction.nextStop ?? "Unavailable"))"
-        }
+        
+        cell.predictionLabel.text = "\(getTimeInMinSec(prediction.arrivalTime, prediction.departureTime)!) (next: \(prediction.nextStop ?? "Unavailable"))"
 
         cell.numbersLabel.text = prediction.carNumbers
+        if let stops = prediction.stopsAway {
+            cell.numbersLabel.text?.append(" - ")
+            cell.numbersLabel.text?.append(stops)
+        }
         addLineImage(cell.lineImage, route: prediction.route, direction: prediction.direction)
         return cell
     }
