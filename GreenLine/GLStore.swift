@@ -19,6 +19,8 @@ class GLStore {
     
     var allTrains: [Train] = []
     
+    var station = ""
+    
     //options that allow us to select the Green Line and predictions
     var options = ["filter[route]": "Green-B,Green-C,Green-D,Green-E", "include": "vehicle,trip"]
     
@@ -59,7 +61,8 @@ class GLStore {
     }()
     
     func fetchData(station: String) {
-        options["filter[stop]"] = station
+        self.station = station
+        options["filter[stop]"] = self.station
         let url = getURL(parameters: options)
         print("\(url)\n")
         let request = URLRequest(url: url)

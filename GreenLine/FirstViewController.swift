@@ -28,6 +28,13 @@ class FirstViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 //        store.fetchData(station: "place-pktrm")
+        
+        //THIS CODE IS SO BAD WHAT AM I DOING AHHHHHH
+        var temp = [String : String]()
+        for item in stationStore.stationInfo {
+            temp[item.value.id] = item.key
+        }
+        navigationItem.title = temp[store.station]
     }
     
     override func didReceiveMemoryWarning() {
@@ -77,7 +84,7 @@ class FirstViewController: UITableViewController {
         }
     }
     
-    
+
     func getTimeInMinSec(_ d: Date?, _ d2: Date?)-> String? {
         if d != nil {
             let min = round(d!.timeIntervalSinceNow/60)
@@ -98,7 +105,7 @@ class FirstViewController: UITableViewController {
     
     @objc private func refreshGLStore() {
         store.allTrains.removeAll()
-        store.fetchData(station: "place-chhil")
+        store.fetchData(station: store.station)
         tableView.reloadData()
         refreshControl?.endRefreshing()
     }
