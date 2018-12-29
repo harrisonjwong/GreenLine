@@ -74,8 +74,6 @@ class GLStore {
                 do {
                     let stuff = try decoder.decode(SeparatedServerResponse.self, from: jsonData)
                     self.allTrains = stuff.trains.sorted(by: self.compareTrainsTime)
-//                    print(self.allTrains)
-//                    print(stuff.trains.sorted(by: self.compareTrainsTime))
                 } catch {
                     print("error trying to convert data to JSON")
                     print(error)
@@ -90,7 +88,6 @@ class GLStore {
         }
         task.resume()
         sleep(1)
-        print(allTrains)
     }
     
     func compareTrainsTime(_ t1: Train, _ t2: Train) -> Bool {
@@ -103,6 +100,7 @@ class GLStore {
 }
 
 // a way to get all the data from the JSON
+// essentially how the JSON is structured
 struct RawServerResponse: Codable {
     
     struct Data: Codable {
@@ -182,113 +180,6 @@ struct RawServerResponse: Codable {
     
 }
 
-//runs the RawServerResponse on the JSON then combines the data into a Train
-//struct SeparatedServerResponse: Decodable {
-//    // final output is a Train class
-//    var trains = [Train]()
-//
-//    init(from decoder: Decoder) throws {
-//        // get raw response from above struct
-//        let rawResponse = try RawServerResponse(from: decoder)
-//
-//        // predictions are [G-10xxx : Data]
-//        var predictions = [String : RawServerResponse.Data]()
-//
-//        // predictions with Stops Away don't have a G-10xxx so we have to handle them by the
-//        // 36xx-38xx label instead
-//        var stopsAwayPredictions = [String : RawServerResponse.Data]()
-//
-//        // if there is a G-10xxx ID then it is a normal prediction, otherwise if that is nil
-//        // it is a 'stops away' prediction
-//        for data in rawResponse.data {
-//            if data.relationships.vehicle.data?.id != nil {
-//                predictions[(data.relationships.vehicle.data?.id)!] = data
-//            } else {
-//                stopsAwayPredictions[(data.relationships.trip.data?.id)!] = data
-//            }
-//        }
-//        // splitting the 'included' part into two, vehicle and trip (based on the type in the JSON)
-//        var vehicles = [String : RawServerResponse.Included]()
-//        var trips = [String : RawServerResponse.Included]()
-//        for data in rawResponse.included {
-//            if data.type == "vehicle" {
-//                vehicles[data.id] = data
-//            } else if data.type == "trip" && data.relationships.vehicle?.data?.id != nil {
-//                trips[(data.relationships.vehicle?.data?.id)!] = data
-//            }
-//        }
-//
-//        // combines the data by the G-10xxx ID
-//        var combinedData = [CombinedData]()
-//        for id in predictions.keys {
-//            combinedData.append(CombinedData(id: id, prediction: predictions[id]!, vehicle: vehicles[id]!, trip: trips[id]!, stopsAway: nil))
-//        }
-//
-//        // combines the stopsAway ones into the combinedData
-//        // only if they are going in the same direction and the train number exists
-//        // removes the value from stopsAwayPredictions; the remaining ones aren't duplicates
-//        // and will be added later
-//        for train in combinedData {
-//            if let numAway = stopsAwayPredictions[(train.vehicle.attributes.label)!] {
-////                train.nextStop = numAway.relationships.stop.data?.id
-//                if numAway.attributes.direction_id == train.prediction.attributes.direction_id {
-//                    train.stopsAway = numAway.attributes.status!
-//                    stopsAwayPredictions.removeValue(forKey: (train.vehicle.attributes.label)!)
-//                }
-//            }
-////            } else {
-////                combinedData.append(CombinedData(id: nil, predictions))
-////            }
-//        }
-//
-//
-//
-//        //creates Train objects for each prediction excluding ones that are only listed as stops away
-//        for glTrain in combinedData {
-//            // if the status (like "stopped 1 stop away") is there, include it instead of the stopsAway
-//            if glTrain.prediction.attributes.status != nil {
-//                glTrain.stopsAway = glTrain.prediction.attributes.status
-//            }
-//            trains.append(Train(id: glTrain.id,
-//                                route: (glTrain.prediction.relationships.route.data!.id)!,
-//                                headsign: (glTrain.trip.attributes.headsign)!,
-//                                direction: glTrain.prediction.attributes.direction_id,
-//                                carNumbers: (glTrain.vehicle.attributes.label)!,
-//                                arrivalTime: getDateOrNilFromString(dateAsString: glTrain.prediction.attributes.arrival_time),
-//                                departureTime: getDateOrNilFromString(dateAsString: glTrain.prediction.attributes.departure_time),
-//                                stopsAway: glTrain.stopsAway,
-//                                nextStop: glTrain.vehicle.relationships.stop?.data?.id))
-//        }
-//
-//        combinedData.sort()
-//
-////        //creates Train objects for remaining 'stops away' predictions
-////        for glTrain in stopsAwayPredictions {
-////            trains.append(Train(id: nil,
-////                                route: glTrain.value.relationships.route.data!.id!,
-////                                headsign: getDestination(glTrain.value.relationships.route.data!.id!),
-////                                direction: glTrain.value.attributes.direction_id,
-////                                carNumbers: glTrain.key,
-////                                arrivalTime: nil,
-////                                departureTime: nil,
-////                                stopsAway: glTrain.value.attributes.status,
-////                                nextStop: getNextStop(i: vehicles, trainNum: glTrain.key)))
-////
-////        }
-//
-//
-//    }
-//
-//    func getNextStop(i: [String : RawServerResponse.Included], trainNum: String)-> String? {
-//        for vehicle in i.values {
-//            if vehicle.attributes.label! == trainNum {
-//                return (vehicle.relationships.stop!.data?.id)!
-//            }
-//        }
-//        return nil
-//    }
-//}
-
 struct SeparatedServerResponse: Decodable {
     // final output is a Train class
     var trains = [Train]()
@@ -311,8 +202,11 @@ struct SeparatedServerResponse: Decodable {
         var trips = [String : RawServerResponse.Included]()
         for data in rawResponse.included {
             if data.type == "vehicle" {
+                // if the data is a vehicle, the id will always be
+                // in relationships -> trip -> data -> id
                 vehicles[data.relationships.trip!.data!.id!] = data
             } else if data.type == "trip" {
+                // if the data is a trip, the id will be the data's id
                 trips[data.id] = data
             }
         }
@@ -350,7 +244,6 @@ struct SeparatedServerResponse: Decodable {
                                 stopsAway: glTrain.stopsAway,
                                 nextStop: nextStop))
         }
-        
         combinedData.sort()
     }
     
@@ -393,7 +286,6 @@ func getDestination(_ route: String)-> String {
 
 // a class to combine a single train into one place with all the data available for that train
 class CombinedData : CustomStringConvertible, Comparable {
-
     
     var id: String?
     var prediction: RawServerResponse.Data
