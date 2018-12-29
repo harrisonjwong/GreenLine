@@ -99,6 +99,9 @@ class FirstViewController: UITableViewController {
                 }
             }
             return "\(min2) min"
+        } else if let departTime = d2 {
+            let min4 = round(departTime.timeIntervalSinceNow/60)
+            return "\(Int(min4)) min"
         }
         return nil
     }
