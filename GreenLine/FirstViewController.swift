@@ -104,10 +104,12 @@ class FirstViewController: UITableViewController {
     }
     
     @objc private func refreshGLStore() {
-        store.allTrains.removeAll()
-        store.fetchData(station: store.station)
-        tableView.reloadData()
-        refreshControl?.endRefreshing()
+        DispatchQueue.global().async {
+            self.store.allTrains.removeAll()
+            self.store.fetchData(station: self.store.station)
+            self.tableView.reloadData()
+            self.refreshControl?.endRefreshing()
+        }
     }
     
 }
