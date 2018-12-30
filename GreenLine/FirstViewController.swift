@@ -54,7 +54,7 @@ class FirstViewController: UITableViewController {
         
         cell.destinationLabel.text = prediction.headsign
         
-        cell.predictionLabel.text = "\(getTimeInMinSec(prediction.arrivalTime, prediction.departureTime)!) (next: \(prediction.nextStop ?? "Unavailable"))"
+        cell.predictionLabel.text = "\(getTimeInMinSec(prediction.arrivalTime, prediction.departureTime) ?? "Unavailable") (next: \(prediction.nextStop ?? "Unavailable"))"
 
         cell.numbersLabel.text = prediction.carNumbers
         if let stops = prediction.stopsAway {
