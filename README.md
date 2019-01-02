@@ -20,13 +20,13 @@ Uses the [MBTA v3-API](https://mbta.com/developers/v3-api).
   * Not sure right now, but maybe a geographically accurate image of green lines
  
 * Predictions Model
-  * !!! Trains looping downtown now have time estimates instead of "stops away" estimates, which are currently being filtered out because they don't have a train ID.
-  * Figure out if they can be matched to a train car/current location. if not, just put time and tbd for rest
+  * ~~!!! Trains looping downtown now have time estimates instead of "stops away" estimates, which are currently being filtered out because they don't have a train ID.~~
+  * ~~Figure out if they can be matched to a train car/current location. if not, just put time and tbd for rest~~
   * Predictions need to be discarded and removed from the table once the train has left the station
 
 * View and Model
   * Auto refresh
-  * Pull down to refresh
+  * ~~Pull down to refresh~~
   * Add table selector to choose station to see predictions for
   * Favorite stations (or nearby??)
 
