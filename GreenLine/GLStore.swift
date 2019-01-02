@@ -315,23 +315,29 @@ class CombinedData : CustomStringConvertible, Comparable {
         return d
     }
     
+    var date: Date? {
+        if let arr = prediction.attributes.arrival_time {
+            return df.date(from: arr)
+        } else if let dpt = prediction.attributes.departure_time {
+            return df.date(from: dpt)
+        } else {
+            return nil
+        }
+    }
+    
     static func < (lhs: CombinedData, rhs: CombinedData) -> Bool {
-        if let arr1 = lhs.prediction.attributes.arrival_time,
-            let arr2 = rhs.prediction.attributes.arrival_time {
-            let d1 = df.date(from: arr1)
-            let d2 = df.date(from: arr2)
-            return (d1!.compare(d2!)).rawValue < 0
+        if let time1 = lhs.date,
+            let time2 = rhs.date {
+            return (time1.compare(time2)).rawValue < 0
         }
         return false
     }
    
 
     static func == (lhs: CombinedData, rhs: CombinedData) -> Bool {
-        if let arr1 = lhs.prediction.attributes.arrival_time,
-            let arr2 = rhs.prediction.attributes.arrival_time {
-            let d1 = df.date(from: arr1)
-            let d2 = df.date(from: arr2)
-            return (d1!.compare(d2!)).rawValue == 0
+        if let time1 = lhs.date,
+            let time2 = rhs.date {
+            return (time1.compare(time2)).rawValue == 0
         }
         return false
     }
