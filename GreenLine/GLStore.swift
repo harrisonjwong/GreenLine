@@ -62,7 +62,6 @@ class GLStore {
     }()
     
     func fetchData(station: String) {
-        print("FIRST FETCH")
         finishedLoading = false
         self.station = station
         options["filter[stop]"] = self.station
@@ -89,12 +88,10 @@ class GLStore {
             }
         }
         task.resume()
-        print("DONE")
         sleep(1)
     }
     
     func fetchData(station: String, enterBlock: @escaping (Bool) -> Bool) {
-        print("SECOND FETCH")
         self.finishedLoading = false
         self.station = station
         options["filter[stop]"] = self.station
@@ -125,7 +122,6 @@ class GLStore {
             }
         }
         task.resume()
-        print("END OF SECOND")
     }
     
     func compareTrainsTime(_ t1: Train, _ t2: Train) -> Bool {

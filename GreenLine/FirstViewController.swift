@@ -123,8 +123,6 @@ class FirstViewController: UITableViewController {
                 while self.store.allTrains.isEmpty && !self.store.finishedLoading {
                     // Wait
                 }
-                print("\(self.store.allTrains.isEmpty) \(self.store.finishedLoading)")
-                print("HERE!!!")
                 self.store.allTrains.sort()
                 self.tableView.reloadData()
                 self.refreshControl?.endRefreshing()
