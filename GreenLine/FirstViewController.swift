@@ -118,17 +118,16 @@ class FirstViewController: UITableViewController {
         DispatchQueue.global().async {
             self.store.allTrains.removeAll()
             self.store.fetchData(station: self.store.station, enterBlock: self.handler)
-            while self.store.allTrains.isEmpty {
-                if self.store.finishedLoading {
-                    break
-                } else {
-                    continue
+            DispatchQueue.main.async {
+                while self.store.allTrains.isEmpty && !self.store.finishedLoading {
+                    // Wait
                 }
+                print("\(self.store.allTrains.isEmpty) \(self.store.finishedLoading)")
+                print("HERE!!!")
+                self.tableView.reloadData()
+                self.refreshControl?.endRefreshing()
             }
-            print("\(self.store.allTrains.isEmpty) \(self.store.finishedLoading)")
-            print("HERE!!!")
-            self.tableView.reloadData()
-            self.refreshControl?.endRefreshing()
+            
         }
         
     }
