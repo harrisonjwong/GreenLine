@@ -18,6 +18,7 @@ let df: DateFormatter = {
 class GLStore {
     
     var allTrains: [Train] = []
+    var finishedLoading = false
     
     var station = ""
     
@@ -61,10 +62,11 @@ class GLStore {
     }()
     
     func fetchData(station: String) {
+        print("FIRST FETCH")
+        finishedLoading = false
         self.station = station
         options["filter[stop]"] = self.station
         let url = getURL(parameters: options)
-        print("\(url)\n")
         let request = URLRequest(url: url)
         let task = session.dataTask(with: request) {
             (data, response, error) -> Void in
@@ -87,7 +89,43 @@ class GLStore {
             }
         }
         task.resume()
+        print("DONE")
         sleep(1)
+    }
+    
+    func fetchData(station: String, enterBlock: @escaping (Bool) -> Bool) {
+        print("SECOND FETCH")
+        self.finishedLoading = false
+        self.station = station
+        options["filter[stop]"] = self.station
+        let url = getURL(parameters: options)
+        let request = URLRequest(url: url)
+        let task = session.dataTask(with: request) {
+            (data, response, error) -> Void in
+            
+            if let jsonData = data {
+                let decoder = JSONDecoder()
+                do {
+                    let stuff = try decoder.decode(SeparatedServerResponse.self, from: jsonData)
+                    self.allTrains = stuff.trains.sorted(by: self.compareTrainsTime)
+                    self.finishedLoading = enterBlock(true)
+                } catch {
+                    print("error trying to convert data to JSON")
+                    print(error)
+                    return
+                }
+            }
+            else if let requestError = error {
+                print("Error: \(requestError)")
+                return
+            }
+            else {
+                print("Unexpected error")
+                return
+            }
+        }
+        task.resume()
+        print("END OF SECOND")
     }
     
     func compareTrainsTime(_ t1: Train, _ t2: Train) -> Bool {

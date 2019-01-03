@@ -106,13 +106,31 @@ class FirstViewController: UITableViewController {
         return nil
     }
     
+    let handler: (Bool) -> Bool = { done in
+        if done {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     @objc private func refreshGLStore() {
         DispatchQueue.global().async {
             self.store.allTrains.removeAll()
-            self.store.fetchData(station: self.store.station)
+            self.store.fetchData(station: self.store.station, enterBlock: self.handler)
+            while self.store.allTrains.isEmpty {
+                if self.store.finishedLoading {
+                    break
+                } else {
+                    continue
+                }
+            }
+            print("\(self.store.allTrains.isEmpty) \(self.store.finishedLoading)")
+            print("HERE!!!")
             self.tableView.reloadData()
             self.refreshControl?.endRefreshing()
         }
+        
     }
     
 }
