@@ -8,10 +8,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--First View Controller-->
+        <!--Prediction View Controller-->
         <scene sceneID="alG-xe-SI2">
             <objects>
-                <tableViewController id="Hq3-r2-5o2" userLabel="First View Controller" customClass="FirstViewController" customModule="GreenLine" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="Hq3-r2-5o2" userLabel="Prediction View Controller" customClass="PredictionViewController" customModule="GreenLine" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="100" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="z9o-IV-dSa">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -74,10 +74,10 @@
             </objects>
             <point key="canvasLocation" x="2420" y="359"/>
         </scene>
-        <!--Second View Controller-->
+        <!--List View Controller-->
         <scene sceneID="fUy-Vr-Iyp">
             <objects>
-                <tableViewController id="vZk-IT-O8S" userLabel="Second View Controller" customClass="SecondViewController" customModule="GreenLine" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="vZk-IT-O8S" userLabel="List View Controller" customClass="ListViewController" customModule="GreenLine" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="byY-oC-kG9">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -106,10 +106,10 @@
             </objects>
             <point key="canvasLocation" x="2420" y="-332"/>
         </scene>
-        <!--Second-->
+        <!--List-->
         <scene sceneID="xL4-Az-aDU">
             <objects>
-                <navigationController id="ul7-dy-u4T" userLabel="Second" sceneMemberID="viewController">
+                <navigationController id="ul7-dy-u4T" userLabel="List" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="gOM-td-sXO"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="2qh-pg-pgl">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
@@ -123,10 +123,10 @@
             </objects>
             <point key="canvasLocation" x="1543" y="360"/>
         </scene>
-        <!--First-->
+        <!--Prediction-->
         <scene sceneID="vgJ-75-w7L">
             <objects>
-                <navigationController id="NT8-el-atK" userLabel="First" sceneMemberID="viewController">
+                <navigationController id="NT8-el-atK" userLabel="Prediction" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="h6b-3X-Nha"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="qIK-xU-oOi">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>

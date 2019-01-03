@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SecondViewController: UITableViewController {
+class ListViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,9 +78,9 @@ class SecondViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showPrediction" {
             let store = sender as! GLStore
-            let firstViewController = segue.destination as! FirstViewController
+            let predictionViewController = segue.destination as! PredictionViewController
             store.allTrains.sort()
-            firstViewController.store = store
+            predictionViewController.store = store
             
         }
     }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FirstViewController: UITableViewController {
+class PredictionViewController: UITableViewController {
     
     var store: GLStore!
     //    var constants = Constants()
