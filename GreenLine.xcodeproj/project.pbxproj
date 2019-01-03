@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2787BD7C21DEBC1B00D9F135 /* LineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2787BD7B21DEBC1B00D9F135 /* LineViewController.swift */; };
+		2787BD7E21DEC3A000D9F135 /* LineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2787BD7D21DEC3A000D9F135 /* LineCell.swift */; };
 		27BABF7621371DFC001A1C7C /* SinglePredictionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BABF7521371DFC001A1C7C /* SinglePredictionCell.swift */; };
 		27BABF7821373F13001A1C7C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 27BABF7721373F13001A1C7C /* Main.storyboard */; };
 		6407FB98212683A4009686B7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6407FB97212683A4009686B7 /* AppDelegate.swift */; };
@@ -21,6 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2787BD7B21DEBC1B00D9F135 /* LineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineViewController.swift; sourceTree = "<group>"; };
+		2787BD7D21DEC3A000D9F135 /* LineCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineCell.swift; sourceTree = "<group>"; };
 		27BABF7521371DFC001A1C7C /* SinglePredictionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SinglePredictionCell.swift; sourceTree = "<group>"; };
 		27BABF7721373F13001A1C7C /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		6407FB94212683A4009686B7 /* GreenLine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GreenLine.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -75,6 +79,8 @@
 				6407FB9B212683A4009686B7 /* ListViewController.swift */,
 				27BABF7521371DFC001A1C7C /* SinglePredictionCell.swift */,
 				27BABF7721373F13001A1C7C /* Main.storyboard */,
+				2787BD7D21DEC3A000D9F135 /* LineCell.swift */,
+				2787BD7B21DEBC1B00D9F135 /* LineViewController.swift */,
 				6407FBA0212683A7009686B7 /* Assets.xcassets */,
 				6407FBA2212683A7009686B7 /* LaunchScreen.storyboard */,
 				6407FBA5212683A7009686B7 /* Info.plist */,
@@ -162,6 +168,8 @@
 				6421D5632127819400E977E6 /* Train.swift in Sources */,
 				6421D5652127894700E977E6 /* Station.swift in Sources */,
 				6407FB9A212683A4009686B7 /* PredictionViewController.swift in Sources */,
+				2787BD7C21DEBC1B00D9F135 /* LineViewController.swift in Sources */,
+				2787BD7E21DEC3A000D9F135 /* LineCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
