@@ -19,6 +19,7 @@ class FirstViewController: UITableViewController {
         refreshControl?.addTarget(self, action: #selector(refreshGLStore), for: .valueChanged)
         
         tableView.estimatedRowHeight = 100
+        tableView.reloadData()
         // Do any additional setup after loading the view, typically from a nib.
 //        store.fetchData(station: "place-pktrm")
 //        stationStore.fetchStationList()

@@ -55,9 +55,22 @@ class SecondViewController: UITableViewController {
         let stationObj = stationDict[stationName]
         if let stationCode = stationObj?.id {
             let glStore = GLStore()
-            glStore.fetchData(station: stationCode)
-            
-            performSegue(withIdentifier: "showPrediction", sender: glStore)
+            let handler: (Bool) -> Bool = { done in
+                if done {
+                    return true
+                } else {
+                    return false
+                }
+            }
+            DispatchQueue.global().async {
+                glStore.fetchData(station: stationCode, enterBlock: handler)
+                DispatchQueue.main.async {
+                    while glStore.allTrains.isEmpty && !glStore.finishedLoading {
+                        // Wait
+                    }
+                    self.performSegue(withIdentifier: "showPrediction", sender: glStore)
+                }
+            }
         }
         
     }
@@ -67,6 +80,7 @@ class SecondViewController: UITableViewController {
             let store = sender as! GLStore
             let firstViewController = segue.destination as! FirstViewController
             firstViewController.store = store
+            
         }
     }
     
