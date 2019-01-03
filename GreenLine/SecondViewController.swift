@@ -79,6 +79,7 @@ class SecondViewController: UITableViewController {
         if segue.identifier == "showPrediction" {
             let store = sender as! GLStore
             let firstViewController = segue.destination as! FirstViewController
+            store.allTrains.sort()
             firstViewController.store = store
             
         }

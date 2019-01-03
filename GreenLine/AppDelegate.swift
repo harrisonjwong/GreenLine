@@ -19,11 +19,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        let firstViewController = rootViewController.topViewController as! FirstViewController
 //        firstViewController.store = GLStore()
         
-        let glStore = GLStore()
-        glStore.fetchData(station: "place-chhil")
-        print(glStore.allTrains)
-        let firstViewController = window!.rootViewController?.children[0].children[0] as! FirstViewController
-        firstViewController.store = glStore
+//        let glStore = GLStore()
+//        glStore.fetchData(station: "place-chhil")
+//        print(glStore.allTrains)
+//        let firstViewController = window!.rootViewController?.children[0].children[0] as! FirstViewController
+//        firstViewController.store = glStore
         
         return true
     }

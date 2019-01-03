@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Train : CustomStringConvertible {
+class Train : CustomStringConvertible, Comparable {
     
     var stationStore = StationStore()
     
@@ -57,6 +57,33 @@ class Train : CustomStringConvertible {
             return "\(min)m \(sec)s"
         }
         return nil
+    }
+    
+    var date: Date? {
+        if let arr = self.arrivalTime {
+            return arr
+        } else if let dpt = self.departureTime {
+            return dpt
+        } else {
+            return nil
+        }
+    }
+    
+    static func < (lhs: Train, rhs: Train) -> Bool {
+        if let time1 = lhs.date,
+            let time2 = rhs.date {
+            return (time1.compare(time2)).rawValue < 0
+        }
+        return false
+    }
+    
+    
+    static func == (lhs: Train, rhs: Train) -> Bool {
+        if let time1 = lhs.date,
+            let time2 = rhs.date {
+            return (time1.compare(time2)).rawValue == 0
+        }
+        return false
     }
     
 

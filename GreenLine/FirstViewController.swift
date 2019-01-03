@@ -125,6 +125,7 @@ class FirstViewController: UITableViewController {
                 }
                 print("\(self.store.allTrains.isEmpty) \(self.store.finishedLoading)")
                 print("HERE!!!")
+                self.store.allTrains.sort()
                 self.tableView.reloadData()
                 self.refreshControl?.endRefreshing()
             }
