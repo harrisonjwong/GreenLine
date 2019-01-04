@@ -79,6 +79,45 @@ class LineViewController: UITableViewController {
             }
         }
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showStations" {
+            let line = sender as! String
+            let listViewController = segue.destination as! ListViewController
+            let stationStore = StationStore()
+            listViewController.flag = true
+            switch line {
+            case "b":
+                listViewController.setStationList(stationStore.bStations)
+            case "c":
+                listViewController.setStationList(stationStore.cStations)
+            case "d":
+                listViewController.setStationList(stationStore.dStations)
+            case "e":
+                listViewController.setStationList(stationStore.eStations)
+            default:
+                break
+            }
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        switch indexPath.row {
+        case 0:
+            performSegue(withIdentifier: "showStations", sender: "b")
+        case 1:
+            performSegue(withIdentifier: "showStations", sender: "c")
+        case 2:
+            performSegue(withIdentifier: "showStations", sender: "d")
+        case 3:
+            performSegue(withIdentifier: "showStations", sender: "e")
+        default:
+            performSegue(withIdentifier: "showStations", sender: "other")
+        }
+
+        
+    }
 
 
     

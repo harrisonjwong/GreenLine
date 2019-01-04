@@ -15,6 +15,17 @@ class ListViewController: UITableViewController {
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         // Do any additional setup after loading the view, typically from a nib.
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if !flag {
+            let stationStore = StationStore()
+            stations.append(contentsOf: stationStore.bStations)
+            stations.append(contentsOf: stationStore.cStations)
+            stations.append(contentsOf: stationStore.dStations)
+            stations.append(contentsOf: stationStore.eStations)
+        }
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -22,15 +33,24 @@ class ListViewController: UITableViewController {
     }
     
 
-    //FIX ME THIS CODE IS SO BAD AHHHHH
-    var stations: [String] {
-        let stationStore = StationStore()
-        var temp = [String]()
-        temp.append(contentsOf: stationStore.bStations)
-        temp.append(contentsOf: stationStore.cStations)
-        temp.append(contentsOf: stationStore.dStations)
-        temp.append(contentsOf: stationStore.eStations)
-        return temp
+//    //FIX ME THIS CODE IS SO BAD AHHHHH
+//    var stationsComputed: [String] {
+//        let stationStore = StationStore()
+//        var temp = [String]()
+//        temp.append(contentsOf: stationStore.bStations)
+//        temp.append(contentsOf: stationStore.cStations)
+//        temp.append(contentsOf: stationStore.dStations)
+//        temp.append(contentsOf: stationStore.eStations)
+//        return temp
+//    }
+    
+    //false means add all stations, true means dont
+    var flag = false
+    
+    var stations = [String]()
+    
+    func setStationList(_ list: [String]) {
+        stations = list
     }
 
     let stationDict = StationStore().stationInfo
