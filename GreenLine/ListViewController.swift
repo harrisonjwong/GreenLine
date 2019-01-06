@@ -10,9 +10,17 @@ import UIKit
 
 class ListViewController: UITableViewController {
 
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        self.tableView.backgroundColor = UIColor.darkGray
+        navigationController?.navigationBar.backgroundColor = UIColor.darkGray
+        navigationController?.navigationBar.barTintColor = UIColor.darkGray
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "OpenSans-Regular", size: 20)!]
         // Do any additional setup after loading the view, typically from a nib.
     }
     
@@ -99,6 +107,11 @@ class ListViewController: UITableViewController {
             }
         }
         
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.backgroundColor = UIColor.darkGray
+        cell.textLabel?.textColor = UIColor.white
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
