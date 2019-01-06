@@ -47,6 +47,10 @@ class PredictionViewController: UITableViewController {
         return store.allTrains.count
     }
     
+//    override func numberOfSections(in tableView: UITableView) -> Int {
+//        return 2
+//    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "SinglePredictionCell", for: indexPath) as! SinglePredictionCell

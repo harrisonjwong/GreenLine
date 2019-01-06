@@ -2,26 +2,60 @@
 //  LineViewController.swift
 //  GreenLine
 //
-//  Created by Benjamin Chan on 1/3/19.
+//  Created by Benjamin Chan on 1/5/19.
 //  Copyright © 2019 Harrison Wong. All rights reserved.
 //
 
 import Foundation
 import UIKit
 
-class LineViewController: UITableViewController {
+class LineViewController : UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    @IBOutlet var tableView: UITableView!
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
-        tableView.estimatedRowHeight = 100
+        tableView.estimatedRowHeight = 100.0
+        tableView.rowHeight = 100.0
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        tableView.separatorInset.left = 10.0
+        tableView.separatorInset.right = 10.0
+        
+        let header = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 1))
+        header.backgroundColor = UIColor.gray
+        let leftInset = UIView(frame: CGRect(x: 0, y: 0, width: tableView.separatorInset.left, height: 1))
+        let rightInset = UIView(frame: CGRect(x: (tableView.frame.size.width - tableView.separatorInset.right), y: 0, width: tableView.separatorInset.right, height: 1))
+        header.addSubview(leftInset)
+        header.addSubview(rightInset)
+        leftInset.backgroundColor = UIColor.darkGray
+        rightInset.backgroundColor = UIColor.darkGray
+        tableView.tableHeaderView = header
+        let line = UIView(frame: CGRect(x: 100.0, y: 0, width: tableView.frame.size.width, height: 1))
+        line.backgroundColor = UIColor.red
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 1))
+
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        self.navigationController?.isNavigationBarHidden = true
+        self.tabBarController?.tabBar.isHidden = true
+        if let index = self.tableView.indexPathForSelectedRow{
+            self.tableView.deselectRow(at: index, animated: true)
+        }
+
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.navigationController?.isNavigationBarHidden = false
+        self.tabBarController?.tabBar.isHidden = false
     }
     
     override func didReceiveMemoryWarning() {
@@ -29,11 +63,15 @@ class LineViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 4
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "LineCell", for: indexPath) as! LineCell
         switch indexPath.row {
@@ -53,12 +91,27 @@ class LineViewController: UITableViewController {
             cell.lineImage.image = #imageLiteral(resourceName: "Green Line")
             cell.lineName.text = "Unknown Line"
         }
-    
+        
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100.0
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch indexPath.row {
+        case 0:
+            performSegue(withIdentifier: "showStations", sender: "b")
+        case 1:
+            performSegue(withIdentifier: "showStations", sender: "c")
+        case 2:
+            performSegue(withIdentifier: "showStations", sender: "d")
+        case 3:
+            performSegue(withIdentifier: "showStations", sender: "e")
+        default:
+            performSegue(withIdentifier: "showStations", sender: "other")
+        }
     }
     
     func addLineImage(_ imageView: UIImageView, route: String, direction: Int) {
@@ -100,26 +153,6 @@ class LineViewController: UITableViewController {
             }
         }
     }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        switch indexPath.row {
-        case 0:
-            performSegue(withIdentifier: "showStations", sender: "b")
-        case 1:
-            performSegue(withIdentifier: "showStations", sender: "c")
-        case 2:
-            performSegue(withIdentifier: "showStations", sender: "d")
-        case 3:
-            performSegue(withIdentifier: "showStations", sender: "e")
-        default:
-            performSegue(withIdentifier: "showStations", sender: "other")
-        }
-
-        
-    }
-
-
     
     
 }

@@ -7,18 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2705100821E1CB510088DC0F /* OpenSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2705100621E1CB510088DC0F /* OpenSans-SemiBold.ttf */; };
+		2705100921E1CB510088DC0F /* OpenSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2705100721E1CB510088DC0F /* OpenSans-Italic.ttf */; };
 		27256A6B21E1990700BAD811 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27256A6321E198CE00BAD811 /* OpenSans-Bold.ttf */; };
 		27256A6C21E1990700BAD811 /* OpenSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27256A6521E198CF00BAD811 /* OpenSans-BoldItalic.ttf */; };
 		27256A6D21E1990700BAD811 /* OpenSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27256A6921E198CF00BAD811 /* OpenSans-ExtraBold.ttf */; };
 		27256A6E21E1990700BAD811 /* OpenSans-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27256A6621E198CF00BAD811 /* OpenSans-ExtraBoldItalic.ttf */; };
-		27256A6F21E1990700BAD811 /* OpenSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27256A6221E198CE00BAD811 /* OpenSans-Italic.ttf */; };
 		27256A7021E1990700BAD811 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27256A6721E198CF00BAD811 /* OpenSans-Light.ttf */; };
 		27256A7121E1990700BAD811 /* OpenSans-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27256A6121E198CE00BAD811 /* OpenSans-LightItalic.ttf */; };
 		27256A7221E1990700BAD811 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27256A6421E198CE00BAD811 /* OpenSans-Regular.ttf */; };
-		27256A7321E1990700BAD811 /* OpenSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27256A6021E198CE00BAD811 /* OpenSans-SemiBold.ttf */; };
 		27256A7421E1990700BAD811 /* OpenSans-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27256A6821E198CF00BAD811 /* OpenSans-SemiBoldItalic.ttf */; };
-		2787BD7C21DEBC1B00D9F135 /* LineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2787BD7B21DEBC1B00D9F135 /* LineViewController.swift */; };
-		2787BD7E21DEC3A000D9F135 /* LineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2787BD7D21DEC3A000D9F135 /* LineCell.swift */; };
+		27256A7621E1A3B000BAD811 /* LineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27256A7521E1A3B000BAD811 /* LineViewController.swift */; };
+		27256A7821E1A71B00BAD811 /* LineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27256A7721E1A71B00BAD811 /* LineCell.swift */; };
 		27BABF7621371DFC001A1C7C /* SinglePredictionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BABF7521371DFC001A1C7C /* SinglePredictionCell.swift */; };
 		27BABF7821373F13001A1C7C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 27BABF7721373F13001A1C7C /* Main.storyboard */; };
 		6407FB98212683A4009686B7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6407FB97212683A4009686B7 /* AppDelegate.swift */; };
@@ -33,9 +33,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		27256A6021E198CE00BAD811 /* OpenSans-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-SemiBold.ttf"; sourceTree = "<group>"; };
+		2705100621E1CB510088DC0F /* OpenSans-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-SemiBold.ttf"; path = "../OpenSans-SemiBold.ttf"; sourceTree = "<group>"; };
+		2705100721E1CB510088DC0F /* OpenSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Italic.ttf"; path = "../OpenSans-Italic.ttf"; sourceTree = "<group>"; };
 		27256A6121E198CE00BAD811 /* OpenSans-LightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-LightItalic.ttf"; sourceTree = "<group>"; };
-		27256A6221E198CE00BAD811 /* OpenSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Italic.ttf"; sourceTree = "<group>"; };
 		27256A6321E198CE00BAD811 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Bold.ttf"; sourceTree = "<group>"; };
 		27256A6421E198CE00BAD811 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
 		27256A6521E198CF00BAD811 /* OpenSans-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-BoldItalic.ttf"; sourceTree = "<group>"; };
@@ -43,8 +43,8 @@
 		27256A6721E198CF00BAD811 /* OpenSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Light.ttf"; sourceTree = "<group>"; };
 		27256A6821E198CF00BAD811 /* OpenSans-SemiBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		27256A6921E198CF00BAD811 /* OpenSans-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-ExtraBold.ttf"; sourceTree = "<group>"; };
-		2787BD7B21DEBC1B00D9F135 /* LineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineViewController.swift; sourceTree = "<group>"; };
-		2787BD7D21DEC3A000D9F135 /* LineCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineCell.swift; sourceTree = "<group>"; };
+		27256A7521E1A3B000BAD811 /* LineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineViewController.swift; sourceTree = "<group>"; };
+		27256A7721E1A71B00BAD811 /* LineCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineCell.swift; sourceTree = "<group>"; };
 		27BABF7521371DFC001A1C7C /* SinglePredictionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SinglePredictionCell.swift; sourceTree = "<group>"; };
 		27BABF7721373F13001A1C7C /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		6407FB94212683A4009686B7 /* GreenLine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GreenLine.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -74,15 +74,15 @@
 		27256A6A21E198D800BAD811 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				2705100721E1CB510088DC0F /* OpenSans-Italic.ttf */,
+				2705100621E1CB510088DC0F /* OpenSans-SemiBold.ttf */,
 				27256A6321E198CE00BAD811 /* OpenSans-Bold.ttf */,
 				27256A6521E198CF00BAD811 /* OpenSans-BoldItalic.ttf */,
 				27256A6921E198CF00BAD811 /* OpenSans-ExtraBold.ttf */,
 				27256A6621E198CF00BAD811 /* OpenSans-ExtraBoldItalic.ttf */,
-				27256A6221E198CE00BAD811 /* OpenSans-Italic.ttf */,
 				27256A6721E198CF00BAD811 /* OpenSans-Light.ttf */,
 				27256A6121E198CE00BAD811 /* OpenSans-LightItalic.ttf */,
 				27256A6421E198CE00BAD811 /* OpenSans-Regular.ttf */,
-				27256A6021E198CE00BAD811 /* OpenSans-SemiBold.ttf */,
 				27256A6821E198CF00BAD811 /* OpenSans-SemiBoldItalic.ttf */,
 			);
 			name = Fonts;
@@ -117,8 +117,8 @@
 				6407FB9B212683A4009686B7 /* ListViewController.swift */,
 				27BABF7521371DFC001A1C7C /* SinglePredictionCell.swift */,
 				27BABF7721373F13001A1C7C /* Main.storyboard */,
-				2787BD7D21DEC3A000D9F135 /* LineCell.swift */,
-				2787BD7B21DEBC1B00D9F135 /* LineViewController.swift */,
+				27256A7721E1A71B00BAD811 /* LineCell.swift */,
+				27256A7521E1A3B000BAD811 /* LineViewController.swift */,
 				6407FBA0212683A7009686B7 /* Assets.xcassets */,
 				6407FBA2212683A7009686B7 /* LaunchScreen.storyboard */,
 				6407FBA5212683A7009686B7 /* Info.plist */,
@@ -188,10 +188,10 @@
 			files = (
 				27BABF7821373F13001A1C7C /* Main.storyboard in Resources */,
 				27256A7221E1990700BAD811 /* OpenSans-Regular.ttf in Resources */,
-				27256A6F21E1990700BAD811 /* OpenSans-Italic.ttf in Resources */,
+				2705100821E1CB510088DC0F /* OpenSans-SemiBold.ttf in Resources */,
+				2705100921E1CB510088DC0F /* OpenSans-Italic.ttf in Resources */,
 				27256A7421E1990700BAD811 /* OpenSans-SemiBoldItalic.ttf in Resources */,
 				27256A6E21E1990700BAD811 /* OpenSans-ExtraBoldItalic.ttf in Resources */,
-				27256A7321E1990700BAD811 /* OpenSans-SemiBold.ttf in Resources */,
 				6407FBA4212683A7009686B7 /* LaunchScreen.storyboard in Resources */,
 				27256A7121E1990700BAD811 /* OpenSans-LightItalic.ttf in Resources */,
 				27256A6B21E1990700BAD811 /* OpenSans-Bold.ttf in Resources */,
@@ -210,15 +210,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				27BABF7621371DFC001A1C7C /* SinglePredictionCell.swift in Sources */,
+				27256A7821E1A71B00BAD811 /* LineCell.swift in Sources */,
 				6421D56121277B5000E977E6 /* GLStore.swift in Sources */,
+				27256A7621E1A3B000BAD811 /* LineViewController.swift in Sources */,
 				6407FB9C212683A4009686B7 /* ListViewController.swift in Sources */,
 				649D9709213450BE009EB572 /* StationStore.swift in Sources */,
 				6407FB98212683A4009686B7 /* AppDelegate.swift in Sources */,
 				6421D5632127819400E977E6 /* Train.swift in Sources */,
 				6421D5652127894700E977E6 /* Station.swift in Sources */,
 				6407FB9A212683A4009686B7 /* PredictionViewController.swift in Sources */,
-				2787BD7C21DEBC1B00D9F135 /* LineViewController.swift in Sources */,
-				2787BD7E21DEC3A000D9F135 /* LineCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

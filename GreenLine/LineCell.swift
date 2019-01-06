@@ -2,7 +2,7 @@
 //  LineCell.swift
 //  GreenLine
 //
-//  Created by Benjamin Chan on 1/3/19.
+//  Created by Benjamin Chan on 1/5/19.
 //  Copyright © 2019 Harrison Wong. All rights reserved.
 //
 

@@ -18,6 +18,8 @@ let df: DateFormatter = {
 class GLStore {
     
     var allTrains: [Train] = []
+    var inboundTrains: [Train] = []
+    var outboundTrains: [Train] = []
     var finishedLoading = false
     
     var station = ""
@@ -75,6 +77,7 @@ class GLStore {
                 do {
                     let stuff = try decoder.decode(SeparatedServerResponse.self, from: jsonData)
                     self.allTrains = stuff.trains.sorted(by: self.compareTrainsTime)
+                    self.splitByDirection()
                 } catch {
                     print("error trying to convert data to JSON")
                     print(error)
@@ -105,10 +108,12 @@ class GLStore {
                 do {
                     let stuff = try decoder.decode(SeparatedServerResponse.self, from: jsonData)
                     self.allTrains = stuff.trains.sorted(by: self.compareTrainsTime)
+                    self.splitByDirection()
                     self.finishedLoading = enterBlock(true)
                 } catch {
                     print("error trying to convert data to JSON")
                     print(error)
+                    self.finishedLoading = enterBlock(true)
                     return
                 }
             }
@@ -122,6 +127,18 @@ class GLStore {
             }
         }
         task.resume()
+    }
+    
+    func splitByDirection() {
+        for i in allTrains {
+            if i.direction == 0 {
+                outboundTrains.append(i)
+            } else {
+                inboundTrains.append(i)
+            }
+        }
+        outboundTrains.sort()
+        inboundTrains.sort()
     }
     
     func compareTrainsTime(_ t1: Train, _ t2: Train) -> Bool {
