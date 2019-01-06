@@ -25,6 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        let firstViewController = window!.rootViewController?.children[0].children[0] as! FirstViewController
 //        firstViewController.store = glStore
         
+        UIApplication.shared.statusBarStyle = .lightContent
         return true
     }
 

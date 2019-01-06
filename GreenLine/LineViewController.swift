@@ -12,11 +12,7 @@ import UIKit
 class LineViewController : UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet var tableView: UITableView!
-    
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.estimatedRowHeight = 100.0

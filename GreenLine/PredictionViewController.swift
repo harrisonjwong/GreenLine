@@ -20,7 +20,9 @@ class PredictionViewController: UITableViewController {
         
         tableView.estimatedRowHeight = 100
         tableView.reloadData()
-        tableView.tableFooterView = UIView()
+        let footer = UIView()
+        footer.backgroundColor = UIColor.darkGray
+        tableView.tableFooterView = footer
         // Do any additional setup after loading the view, typically from a nib.
 //        store.fetchData(station: "place-pktrm")
 //        stationStore.fetchStationList()
@@ -77,7 +79,9 @@ class PredictionViewController: UITableViewController {
         cell.destinationLabel.text = prediction.headsign
         
         cell.predictionLabel.text = "\(getTimeInMinSec(prediction.arrivalTime, prediction.departureTime) ?? "Unavailable") (next: \(prediction.nextStop ?? "Unavailable"))"
-
+//        cell.predictionLabel.text = "(next: \(prediction.nextStop ?? "Unavailable"))"
+//
+//        cell.minutesLabel.text = "\(getTimeInMinSec(prediction.arrivalTime, prediction.departureTime) ?? "Unavailable")"
         
         cell.numbersLabel.text = prediction.carNumbers
         if let stops = prediction.stopsAway {
