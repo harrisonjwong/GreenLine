@@ -36,11 +36,6 @@ class LineViewController : UIViewController, UITableViewDelegate, UITableViewDat
         leftInset.backgroundColor = UIColor.darkGray
         rightInset.backgroundColor = UIColor.darkGray
         tableView.tableHeaderView = header
-        let line = UIView(frame: CGRect(x: 100.0, y: 0, width: tableView.frame.size.width, height: 1))
-        line.backgroundColor = UIColor.red
-        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 1))
-
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -95,6 +95,9 @@ class GLStore {
     }
     
     func fetchData(station: String, enterBlock: @escaping (Bool) -> Bool) {
+        allTrains.removeAll()
+        outboundTrains.removeAll()
+        inboundTrains.removeAll()
         self.finishedLoading = false
         self.station = station
         options["filter[stop]"] = self.station

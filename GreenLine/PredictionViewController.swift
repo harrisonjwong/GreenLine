@@ -20,6 +20,7 @@ class PredictionViewController: UITableViewController {
         
         tableView.estimatedRowHeight = 100
         tableView.reloadData()
+        tableView.tableFooterView = UIView()
         // Do any additional setup after loading the view, typically from a nib.
 //        store.fetchData(station: "place-pktrm")
 //        stationStore.fetchStationList()
@@ -49,30 +50,59 @@ class PredictionViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0 {
+            return store.outboundTrains.count
+        } else {
+            return store.inboundTrains.count
+        }
         return store.allTrains.count
     }
     
-//    override func numberOfSections(in tableView: UITableView) -> Int {
-//        return 2
-//    }
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "SinglePredictionCell", for: indexPath) as! SinglePredictionCell
         
-        let prediction = store.allTrains[indexPath.row]
+        
+        var prediction: Train
+        if indexPath.section == 0 {
+            prediction = store.outboundTrains[indexPath.row]
+        } else {
+            prediction = store.inboundTrains[indexPath.row]
+        }
         
         cell.destinationLabel.text = prediction.headsign
         
         cell.predictionLabel.text = "\(getTimeInMinSec(prediction.arrivalTime, prediction.departureTime) ?? "Unavailable") (next: \(prediction.nextStop ?? "Unavailable"))"
 
+        
         cell.numbersLabel.text = prediction.carNumbers
         if let stops = prediction.stopsAway {
-            cell.numbersLabel.text?.append(" - ")
-            cell.numbersLabel.text?.append(stops)
+            if prediction.carNumbers == nil {
+                cell.numbersLabel.text = stops
+            } else {
+                cell.numbersLabel.text?.append(" - ")
+                cell.numbersLabel.text?.append(stops)
+            }
         }
         addLineImage(cell.lineImage, route: prediction.route, direction: prediction.direction)
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == 0 {
+            return "Outbound"
+        } else {
+            return "Inbound"
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        let header = view as! UITableViewHeaderFooterView
+        header.textLabel?.font = UIFont(name: "OpenSans-Bold", size: 16.0)
     }
     
     func addLineImage(_ imageView: UIImageView, route: String, direction: Int) {
@@ -126,7 +156,6 @@ class PredictionViewController: UITableViewController {
     
     @objc private func refreshGLStore() {
         DispatchQueue.global().async {
-            self.store.allTrains.removeAll()
             self.store.fetchData(station: self.store.station, enterBlock: self.handler)
             DispatchQueue.main.async {
                 while self.store.allTrains.isEmpty && !self.store.finishedLoading {
