@@ -2,6 +2,36 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:GreenLine.xcodeproj">
+      location = "group:../GreenLine/Fonts/OpenSans-Bold.ttf">
+   </FileRef>
+   <FileRef
+      location = "group:../GreenLine/Fonts/OpenSans-BoldItalic.ttf">
+   </FileRef>
+   <FileRef
+      location = "group:../GreenLine/Fonts/OpenSans-ExtraBold.ttf">
+   </FileRef>
+   <FileRef
+      location = "group:../GreenLine/Fonts/OpenSans-ExtraBoldItalic.ttf">
+   </FileRef>
+   <FileRef
+      location = "group:../GreenLine/Fonts/OpenSans-Italic.ttf">
+   </FileRef>
+   <FileRef
+      location = "group:../GreenLine/Fonts/OpenSans-Light.ttf">
+   </FileRef>
+   <FileRef
+      location = "group:../GreenLine/Fonts/OpenSans-LightItalic.ttf">
+   </FileRef>
+   <FileRef
+      location = "group:../GreenLine/Fonts/OpenSans-Regular.ttf">
+   </FileRef>
+   <FileRef
+      location = "group:../GreenLine/Fonts/OpenSans-SemiBold.ttf">
+   </FileRef>
+   <FileRef
+      location = "group:../GreenLine/Fonts/OpenSans-SemiBoldItalic.ttf">
+   </FileRef>
+   <FileRef
+      location = "self:">
    </FileRef>
 </Workspace>

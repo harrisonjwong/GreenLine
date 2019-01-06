@@ -65,6 +65,7 @@ class ListViewController: UITableViewController {
         let stationName = stations[indexPath.row]
         
         cell.textLabel?.text = stationName
+        cell.textLabel?.font = UIFont(name: "OpenSans-Regular", size: 17.0)
         
         return cell;
     }
