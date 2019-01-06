@@ -36,6 +36,11 @@ class PredictionViewController: UITableViewController {
             temp[item.value.id] = item.key
         }
         navigationItem.title = temp[store.station]
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.tabBarController?.tabBar.isHidden = false
     }
     
     override func didReceiveMemoryWarning() {

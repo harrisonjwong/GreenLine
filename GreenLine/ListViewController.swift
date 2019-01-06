@@ -25,6 +25,11 @@ class ListViewController: UITableViewController {
             stations.append(contentsOf: stationStore.dStations)
             stations.append(contentsOf: stationStore.eStations)
         }
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.tabBarController?.tabBar.isHidden = false
     }
 
     override func didReceiveMemoryWarning() {
